@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NewTask.class);
         startActivity(intent);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
             fragment.setArguments(args);
             return fragment;
         }
+
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,

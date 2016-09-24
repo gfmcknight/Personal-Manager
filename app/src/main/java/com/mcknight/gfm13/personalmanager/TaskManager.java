@@ -52,4 +52,14 @@ public class TaskManager {
         }
         return taskQueue;
     }
+
+    public void RemoveTask(Task task)
+    {
+        GetTasks().remove(task);
+    }
+
+    public void AddTask(Task task)
+    {
+        GetTasks().add(task);
+    }
 }

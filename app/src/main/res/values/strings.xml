@@ -9,4 +9,5 @@
     <string name="task_desc_hint">Enter a description for this task.</string>
     <string name="time_est_hint">How long do you think this will take?</string>
     <string name="submit_button">Submit</string>
+    <string name="all_tasks_message">All tasks:</string>
 </resources>

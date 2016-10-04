@@ -27,6 +27,7 @@ public class NewTask extends AppCompatActivity {
                 date.getYear(), date.getMonth(), date.getDayOfMonth());
         TaskManager.getInstance().AddTask(newTask);
         TaskManager.getInstance().Commit();
+        finish();
     }
 
 }

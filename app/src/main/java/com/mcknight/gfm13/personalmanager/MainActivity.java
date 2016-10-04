@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements TaskViewFragment.OnFragmentInteractionListener {
 
+    public static double DP_PIXEL_SCALING = 1.0;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements TaskViewFragment.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        TaskManager.getInstance().Init(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements TaskViewFragment.
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        TaskManager.getInstance().Init(this);
+        DP_PIXEL_SCALING = getResources().getDisplayMetrics().density;
 
     }
 

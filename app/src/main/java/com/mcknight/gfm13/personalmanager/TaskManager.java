@@ -22,17 +22,22 @@ public class TaskManager {
     private Context context;
     private List<Task> taskQueue;
 
+    private boolean initialized = false;
+
     public void Init(Context context){
-        this.context = context;
-        File tasksLocation = new File(context.getFilesDir(), "Tasks");
-        List<JSONObject> objects = (new JSONConverter(tasksLocation)).GetJSONObjects();
+        if (!initialized) {
+            this.context = context;
+            File tasksLocation = new File(context.getFilesDir(), "Tasks");
+            List<JSONObject> objects = (new JSONConverter(tasksLocation)).GetJSONObjects();
 
-        if (taskQueue == null){
-            taskQueue = new LinkedList<>();
-        }
+            if (taskQueue == null) {
+                taskQueue = new LinkedList<>();
+            }
 
-        for (JSONObject object : objects) {
-            taskQueue.add(Task.TaskFromJSON(object));
+            for (JSONObject object : objects) {
+                taskQueue.add(Task.TaskFromJSON(object));
+            }
+            initialized = true;
         }
     }
 

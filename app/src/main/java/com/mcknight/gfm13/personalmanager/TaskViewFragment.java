@@ -4,9 +4,17 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.List;
 
 
 /**
@@ -50,13 +58,29 @@ public class TaskViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        //LinearLayout linearLayout = (LinearLayout)getView().findViewById(R.id.linear_task_layout);
+        if (savedInstanceState != null){
+            return;
+        }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_task_view, container, false);
+
+        LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.linear_task_layout);
+        List<Task> tasks = TaskManager.getInstance().GetTasks();
+        int numberOfTasks = TaskManager.getInstance().GetTasks().size();
+        for (int i = 0; i < numberOfTasks; i++)
+        {
+            linearLayout.addView(ViewFactory.makeView(tasks.get(i), getContext()));
+        }
+        return view;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -65,6 +89,7 @@ public class TaskViewFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -81,6 +106,13 @@ public class TaskViewFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume(){
+        ((TextView)getView().findViewById(R.id.task_number)).setText("All Tasks (" +
+                TaskManager.getInstance().GetTasks().size() + "):");
+        super.onResume();
     }
 
     /**

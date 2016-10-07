@@ -4,12 +4,18 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.text.Format;
 
 /**
  * Created by gfm13 on 9/30/2016.
@@ -47,12 +53,13 @@ public class ViewFactory {
         linearLayout.addView(textLayout);
 
         TextView taskSubject = new TextView(context);
-        taskSubject.setText(task.Name);
+        taskSubject.setText(task.Name+ ": " + (Math.round((task.HoursEstimate - task.TimeWorked) * 10))/10 + "hrs");
         taskSubject.setTextSize(18.0f);
         taskSubject.setTextColor(Color.BLACK);
 
+        String[] date = task.dateDue.toString().split(" ");
         TextView taskDescription = new TextView(context);
-        taskDescription.setText(task.Description);
+        taskDescription.setText(date[0] + " " + date[1]+ " " + date[2] + "\n"+ task.Description);
         taskDescription.setTextSize(12.0f);
         taskDescription.setTextColor(Color.GRAY);
 

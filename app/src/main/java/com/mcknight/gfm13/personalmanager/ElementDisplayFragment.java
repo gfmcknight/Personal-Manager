@@ -4,15 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.mcknight.gfm13.personalmanager.ElementDisplayTypes.PriorityDisplay;
+import com.mcknight.gfm13.personalmanager.ElementDisplayTypes.ProjectDisplay;
+import com.mcknight.gfm13.personalmanager.ElementDisplayTypes.TaskDisplay;
 
 import java.util.List;
 
@@ -20,20 +20,27 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TaskViewFragment.OnFragmentInteractionListener} interface
+ * {@link ElementDisplayFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TaskViewFragment#newInstance} factory method to
+ * Use the {@link ElementDisplayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskViewFragment extends Fragment {
+public abstract class ElementDisplayFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     // TODO: Rename and change types of parameters
 
+    public enum DisplayType {
+        Priority, Task, Project
+    }
+
     private OnFragmentInteractionListener mListener;
 
-    public TaskViewFragment() {
+    protected List<View> taskViews;
+    protected String pageTitle;
+
+    public ElementDisplayFragment() {
         // Required empty public constructor
     }
 
@@ -43,11 +50,25 @@ public class TaskViewFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TaskViewFragment.
+     * @return A new instance of fragment ElementDisplayFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TaskViewFragment newInstance() {
-        TaskViewFragment fragment = new TaskViewFragment();
+    public static ElementDisplayFragment newInstance(DisplayType displayType) {
+        ElementDisplayFragment fragment;
+        switch (displayType) {
+            case Priority:
+                fragment = new PriorityDisplay();
+                break;
+            case Task:
+                fragment = new TaskDisplay();
+                break;
+            case Project:
+                fragment = new ProjectDisplay();
+                break;
+            default:
+                fragment = new TaskDisplay();
+                break;
+        }
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -71,14 +92,6 @@ public class TaskViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_view, container, false);
-
-        LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.linear_task_layout);
-        List<Task> tasks = TaskManager.getInstance().GetTasks();
-        int numberOfTasks = TaskManager.getInstance().GetTasks().size();
-        for (int i = 0; i < numberOfTasks; i++)
-        {
-            linearLayout.addView(ViewFactory.makeView(tasks.get(i), getContext()));
-        }
         return view;
 
     }
@@ -102,6 +115,24 @@ public class TaskViewFragment extends Fragment {
         }
     }
 
+    private void refresh() {
+        LinearLayout linearLayout = (LinearLayout)getView().findViewById(R.id.linear_task_layout);
+
+        if (taskViews != null) {
+            for (View view : taskViews) {
+                linearLayout.removeView(view);
+            }
+        }
+
+        taskViews = getPageElements();
+
+        for (View view: taskViews) {
+            linearLayout.addView(view);
+        }
+    }
+
+    abstract protected List<View> getPageElements();
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -110,9 +141,18 @@ public class TaskViewFragment extends Fragment {
 
     @Override
     public void onResume(){
-        ((TextView)getView().findViewById(R.id.task_number)).setText("All Tasks (" +
-                TaskManager.getInstance().GetTasks().size() + "):");
+        refresh();
+        if (taskViews != null) {
+            ((TextView) getView().findViewById(R.id.page_title)).setText(pageTitle + " (" +
+                    taskViews.size() + "):");
+        }
         super.onResume();
+    }
+
+    @Override
+    public void onStart(){
+        refresh();
+        super.onStart();
     }
 
     /**

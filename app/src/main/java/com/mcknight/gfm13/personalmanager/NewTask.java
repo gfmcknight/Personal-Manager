@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
+
 public class NewTask extends AppCompatActivity {
 
     @Override
@@ -27,6 +31,8 @@ public class NewTask extends AppCompatActivity {
                 date.getYear(), date.getMonth(), date.getDayOfMonth());
         TaskManager.getInstance().AddTask(newTask);
         TaskManager.getInstance().Commit();
+
+        RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.ADD, newTask));
         finish();
     }
 

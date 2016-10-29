@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.mcknight.gfm13.personalmanager.ElementDisplayTypes.PriorityDisplay;
 import com.mcknight.gfm13.personalmanager.ElementDisplayTypes.ProjectDisplay;
 import com.mcknight.gfm13.personalmanager.ElementDisplayTypes.TaskDisplay;
+import com.mcknight.gfm13.personalmanager.Refreshing.IRefreshListener;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
 
 import java.util.List;
 
@@ -25,7 +28,7 @@ import java.util.List;
  * Use the {@link ElementDisplayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public abstract class ElementDisplayFragment extends Fragment {
+public abstract class ElementDisplayFragment extends Fragment implements IRefreshListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -71,6 +74,8 @@ public abstract class ElementDisplayFragment extends Fragment {
         }
         Bundle args = new Bundle();
         fragment.setArguments(args);
+
+        RefreshInvoker.getInstance().addRefreshListener(fragment);
         return fragment;
     }
 
@@ -79,7 +84,6 @@ public abstract class ElementDisplayFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-        //LinearLayout linearLayout = (LinearLayout)getView().findViewById(R.id.linear_task_layout);
         if (savedInstanceState != null){
             return;
         }
@@ -129,6 +133,15 @@ public abstract class ElementDisplayFragment extends Fragment {
         for (View view: taskViews) {
             linearLayout.addView(view);
         }
+        if (taskViews != null) {
+            ((TextView) getView().findViewById(R.id.page_title)).setText(pageTitle + " (" +
+                    taskViews.size() + "):");
+        }
+    }
+
+    public void onRefresh(RefreshEvent e) {
+        //TODO: Become selective with when to refresh based on RefreshEvent properties
+        refresh();
     }
 
     abstract protected List<View> getPageElements();
@@ -142,10 +155,7 @@ public abstract class ElementDisplayFragment extends Fragment {
     @Override
     public void onResume(){
         refresh();
-        if (taskViews != null) {
-            ((TextView) getView().findViewById(R.id.page_title)).setText(pageTitle + " (" +
-                    taskViews.size() + "):");
-        }
+
         super.onResume();
     }
 

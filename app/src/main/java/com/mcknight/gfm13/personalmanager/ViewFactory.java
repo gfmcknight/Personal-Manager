@@ -15,6 +15,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
+
 import java.text.Format;
 
 /**
@@ -100,6 +104,7 @@ public class ViewFactory {
             public void onClick(View view) {
                 TaskManager.getInstance().RemoveTask(task);
                 TaskManager.getInstance().Commit();
+                RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.DELETE, task));
             }
         });
 

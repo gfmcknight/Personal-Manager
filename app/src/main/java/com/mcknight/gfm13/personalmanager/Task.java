@@ -20,8 +20,10 @@ public class Task {
     private int dayDue;
     Date dateDue;
 
+    private int id;
+
     public Task(String name, String groupName, String description, float hoursEstimate, float timeWorked,
-                int yearDue, int monthDue, int dayDue) {
+                int yearDue, int monthDue, int dayDue, int id) {
 
         Name = name;
         GroupName = groupName;
@@ -52,6 +54,7 @@ public class Task {
             jsonObject.put("Year", yearDue);
             jsonObject.put("Month", monthDue);
             jsonObject.put("Day", dayDue);
+            jsonObject.put("Id", id);
             return jsonObject;
         }
         catch (Exception e)
@@ -64,11 +67,14 @@ public class Task {
         try {
             return new Task(object.getString("Name"), object.getString("Group"), object.getString("Description"),
                     (float)object.getDouble("HoursEstimate"), (float)object.getDouble("TimeWorked"),
-                    object.getInt("Year"), object.getInt("Month"), object.getInt("Day"));
+                    object.getInt("Year"), object.getInt("Month"), object.getInt("Day"), object.getInt("Id"));
         }
-        catch (Exception e){
+        catch (Exception e) {
             return null;
         }
+    }
 
+    public  int getId(){
+        return id;
     }
 }

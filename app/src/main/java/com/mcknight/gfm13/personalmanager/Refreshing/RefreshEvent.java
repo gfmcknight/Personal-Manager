@@ -12,6 +12,8 @@ public class RefreshEvent {
     boolean affectsTask;
     boolean affectsProject;
 
+   private int itemID;
+
     private Task affectedTask;
     //private Project affectedProject;
 
@@ -46,6 +48,12 @@ public class RefreshEvent {
         this.type = type;
         affectsTask = true;
         affectsProject = false;
+        itemID = affectedTask.getId();
+    }
+
+    public RefreshEvent(RefreshEventType type, int affectedItemID) {
+        itemID = affectedItemID;
+        this.type = type;
     }
 
 }

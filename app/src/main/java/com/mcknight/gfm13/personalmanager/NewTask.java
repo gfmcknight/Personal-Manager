@@ -28,7 +28,7 @@ public class NewTask extends AppCompatActivity {
         float timeEstimate = Float.parseFloat(((EditText)findViewById(R.id.timeEstimate)).getText().toString());
 
         Task newTask = new Task(taskName, "", taskDescription, timeEstimate, 0f,
-                date.getYear(), date.getMonth(), date.getDayOfMonth());
+                date.getYear(), date.getMonth(), date.getDayOfMonth(), TaskManager.getInstance().getNewID());
         TaskManager.getInstance().AddTask(newTask);
         TaskManager.getInstance().Commit();
 

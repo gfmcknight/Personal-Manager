@@ -2,6 +2,7 @@ package com.mcknight.gfm13.personalmanager;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.icu.text.DateFormat;
@@ -31,7 +32,7 @@ public class ViewFactory {
     private static final int TASK_LENGTH_CUTOFF = 425;
 
 
-    public static View makeView(final Task task, Context context)
+    public static View makeView(final Task task, final Context context)
     {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setVisibility(View.VISIBLE);
@@ -93,6 +94,13 @@ public class ViewFactory {
                 (int)(40* MainActivity.DP_PIXEL_SCALING)));
         editButton.setBackgroundResource(R.drawable.edit);
         buttonLayout.addView(editButton);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, EditTask.class);
+                context.startActivity(intent);
+            }
+        });
 
         Button deleteButton = new Button(context);
         deleteButton.setLayoutParams(new ViewGroup.LayoutParams((int)(40 * MainActivity.DP_PIXEL_SCALING),

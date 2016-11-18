@@ -4,6 +4,7 @@ package com.mcknight.gfm13.personalmanager;
  * Created by gfm13 on 9/12/2016.
  */
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import org.json.*;
 
@@ -21,6 +22,8 @@ public class TaskManager {
 
     private Context context;
     private List<Task> taskQueue;
+    int currentID;
+    SharedPreferences preferences;
 
     private boolean initialized = false;
 
@@ -38,6 +41,9 @@ public class TaskManager {
                 taskQueue.add(Task.TaskFromJSON(object));
             }
             initialized = true;
+
+            preferences = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         }
     }
 
@@ -66,5 +72,22 @@ public class TaskManager {
     public void AddTask(Task task)
     {
         GetTasks().add(task);
+    }
+
+    public int getNewID() {
+        int currentIDValue = preferences.getInt("ID_count", 0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("ID_count", currentIDValue + 1);
+        editor.commit();
+        return currentIDValue;
+    }
+
+    public Task getTaskByID(int id) {
+        for (Task task : taskQueue) {
+            if (id == task.getId()) {
+                return task;
+            }
+        }
+        return null;
     }
 }

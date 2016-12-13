@@ -18,8 +18,8 @@ public class TaskDisplay extends ElementDisplayFragment {
     protected List<View> getPageElements() {
         List<View> elements = new ArrayList<>();
 
-        List<Task> tasks = TaskManager.getInstance().GetTasks();
-        int numberOfTasks = TaskManager.getInstance().GetTasks().size();
+        List<Task> tasks = TaskManager.getInstance().getTasks();
+        int numberOfTasks = TaskManager.getInstance().getTasks().size();
         for (int i = 0; i < numberOfTasks; i++)
         {
             elements.add(ViewFactory.makeView(tasks.get(i), getContext()));
@@ -29,7 +29,6 @@ public class TaskDisplay extends ElementDisplayFragment {
     }
 
     public TaskDisplay() {
-        super();
         pageTitle = "All Tasks";
     }
 }

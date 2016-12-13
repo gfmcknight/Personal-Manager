@@ -26,6 +26,9 @@
             android:name=".EditTask"
             android:label="@string/title_activity_edit_task"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Groups.GroupsEditor"
+            android:label="@string/title_activity_groups_editor"></activity>
     </application>
 
 </manifest>

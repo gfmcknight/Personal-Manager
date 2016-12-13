@@ -21,24 +21,24 @@ public class TaskManager {
     }
 
     private Context context;
-    private List<Task> taskQueue;
+    private List<Task> taskList;
     int currentID;
     SharedPreferences preferences;
 
     private boolean initialized = false;
 
-    public void Init(Context context){
+    public void init(Context context){
         if (!initialized) {
             this.context = context;
             File tasksLocation = new File(context.getFilesDir(), "Tasks");
             List<JSONObject> objects = (new JSONConverter(tasksLocation)).GetJSONObjects();
 
-            if (taskQueue == null) {
-                taskQueue = new LinkedList<>();
+            if (taskList == null) {
+                taskList = new LinkedList<>();
             }
 
             for (JSONObject object : objects) {
-                taskQueue.add(Task.TaskFromJSON(object));
+                taskList.add(Task.TaskFromJSON(object));
             }
             initialized = true;
 
@@ -47,9 +47,9 @@ public class TaskManager {
         }
     }
 
-    public void Commit(){
+    public void commit(){
         List<JSONObject> objects = new ArrayList<>();
-        for (Task task: taskQueue) {
+        for (Task task: taskList) {
             objects.add(task.ToJSON());
         }
 
@@ -57,21 +57,21 @@ public class TaskManager {
         (new JSONConverter(tasksLocation)).PutJSONObjects(objects);
     }
 
-    public List<Task> GetTasks() {
-        if (taskQueue == null){
-            taskQueue = new LinkedList<>();
+    public List<Task> getTasks() {
+        if (taskList == null){
+            taskList = new LinkedList<>();
         }
-        return taskQueue;
+        return taskList;
     }
 
     public void RemoveTask(Task task)
     {
-        GetTasks().remove(task);
+        getTasks().remove(task);
     }
 
-    public void AddTask(Task task)
+    public void addTask(Task task)
     {
-        GetTasks().add(task);
+        getTasks().add(task);
     }
 
     public int getNewID() {
@@ -83,7 +83,7 @@ public class TaskManager {
     }
 
     public Task getTaskByID(int id) {
-        for (Task task : taskQueue) {
+        for (Task task : taskList) {
             if (id == task.getId()) {
                 return task;
             }

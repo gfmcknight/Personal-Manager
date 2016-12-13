@@ -18,7 +18,6 @@ public class ProjectDisplay extends ElementDisplayFragment {
     }
     public ProjectDisplay()
     {
-        super();
         pageTitle = "All Projects";
     }
 

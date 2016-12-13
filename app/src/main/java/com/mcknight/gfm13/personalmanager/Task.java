@@ -9,11 +9,11 @@ import org.json.*;
  */
 public class Task {
 
-    public String Name;
-    public String GroupName;
-    public String Description;
-    public float HoursEstimate;
-    public float TimeWorked;
+    private String Name;
+    private String groupName;
+    private String description;
+    private float hoursEstimate;
+    private float timeWorked;
 
     private int yearDue;
     private int monthDue;
@@ -25,11 +25,11 @@ public class Task {
     public Task(String name, String groupName, String description, float hoursEstimate, float timeWorked,
                 int yearDue, int monthDue, int dayDue, int id) {
 
-        Name = name;
-        GroupName = groupName;
-        Description = description;
-        HoursEstimate = hoursEstimate;
-        TimeWorked = timeWorked;
+        setName(name);
+        setGroupName(groupName);
+        setDescription(description);
+        setHoursEstimate(hoursEstimate);
+        setTimeWorked(timeWorked);
 
         this.yearDue = yearDue;
         this.monthDue = monthDue;
@@ -46,11 +46,11 @@ public class Task {
     public JSONObject ToJSON(){
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("Name", Name);
-            jsonObject.put("Group", GroupName);
-            jsonObject.put("Description", Description);
-            jsonObject.put("HoursEstimate", HoursEstimate);
-            jsonObject.put("TimeWorked", TimeWorked);
+            jsonObject.put("Name", getName());
+            jsonObject.put("Group", getGroupName());
+            jsonObject.put("Description", getDescription());
+            jsonObject.put("HoursEstimate", getHoursEstimate());
+            jsonObject.put("TimeWorked", getTimeWorked());
             jsonObject.put("Year", yearDue);
             jsonObject.put("Month", monthDue);
             jsonObject.put("Day", dayDue);
@@ -76,5 +76,45 @@ public class Task {
 
     public  int getId(){
         return id;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public float getHoursEstimate() {
+        return hoursEstimate;
+    }
+
+    public void setHoursEstimate(float hoursEstimate) {
+        this.hoursEstimate = hoursEstimate;
+    }
+
+    public float getTimeWorked() {
+        return timeWorked;
+    }
+
+    public void setTimeWorked(float timeWorked) {
+        this.timeWorked = timeWorked;
     }
 }

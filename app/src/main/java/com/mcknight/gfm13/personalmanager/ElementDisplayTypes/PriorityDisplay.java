@@ -18,7 +18,6 @@ public class PriorityDisplay extends ElementDisplayFragment {
     }
 
     public PriorityDisplay () {
-        super();
         pageTitle = "Things to Work On";
     }
 }

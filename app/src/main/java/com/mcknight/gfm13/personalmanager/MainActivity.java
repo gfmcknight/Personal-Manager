@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.mcknight.gfm13.personalmanager.Groups.GroupManager;
+import com.mcknight.gfm13.personalmanager.Groups.GroupsEditor;
+
 public class MainActivity extends AppCompatActivity implements ElementDisplayFragment.OnFragmentInteractionListener {
 
     public static double DP_PIXEL_SCALING = 1.0;
@@ -39,13 +42,15 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TaskManager.getInstance().Init(this);
+        TaskManager.getInstance().init(this);
+        GroupManager.getInstance().init(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -84,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_groups) {
+            Intent intent = new Intent(this, GroupsEditor.class);
+            startActivity(intent);
             return true;
         }
         if (id == R.id.action_new_task){

@@ -15,6 +15,11 @@ import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import static android.text.InputType.TYPE_CLASS_NUMBER;
+
 
 /**
  * Created by gfm13 on 9/30/2016.
@@ -25,19 +30,91 @@ public class ViewFactory {
     private static final int MARGIN = 2;
     private static final int TASK_LENGTH_CUTOFF = 425;
 
-    public static View makeView(final String name, Context context, final OnGroupRemovalListener listener){
-        final LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setVisibility(View.VISIBLE);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.setBackgroundResource(R.drawable.groupbackground);
-        linearLayout.setPadding(PADDING, PADDING, PADDING, PADDING);
+    public static DateChoiceHandler makeDateView(Context context) {
+        Date currentDate = new Date(System.currentTimeMillis());
+        Calendar.getInstance().setTime(currentDate);
+
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        return makeDateView(context, currentYear, currentMonth, currentDay);
+    }
+
+    public static DateChoiceHandler makeDateView(Context context, int year, int month, int day) {
+        LinearLayout linearLayout = makeLinearLayoutWrapper(context);
+
+        LinearLayout monthLayout = new LinearLayout(context);
+        monthLayout.setOrientation(LinearLayout.VERTICAL);
         {
             LinearLayout.LayoutParams dimensions;
-            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            dimensions.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
-            linearLayout.setLayoutParams(dimensions);
+            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            monthLayout.setLayoutParams(dimensions);
         }
+        Button monthIncrement = new Button(context);
+        monthIncrement.setText("^");
+        Button monthDecrement = new Button(context);
+        monthDecrement.setText("v");
+        EditText monthText = new EditText(context);
+        monthText.setRawInputType(TYPE_CLASS_NUMBER);
+        monthText.setText(Integer.valueOf(month).toString());
+        monthText.setMaxEms(2);
+        monthLayout.addView(monthIncrement);
+        monthLayout.addView(monthText);
+        monthLayout.addView(monthDecrement);
+
+        LinearLayout dayLayout = new LinearLayout(context);
+        dayLayout.setOrientation(LinearLayout.VERTICAL);
+        {
+            LinearLayout.LayoutParams dimensions;
+            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            monthLayout.setLayoutParams(dimensions);
+        }
+        Button dayIncrement = new Button(context);
+        dayIncrement.setText("^");
+        Button dayDecrement = new Button(context);
+        dayDecrement.setText("v");
+        EditText dayText = new EditText(context);
+        dayText.setRawInputType(TYPE_CLASS_NUMBER);
+        dayText.setText(Integer.valueOf(day).toString());
+        dayText.setMaxEms(2);
+        dayLayout.addView(dayIncrement);
+        dayLayout.addView(dayText);
+        dayLayout.addView(dayDecrement);
+
+
+        LinearLayout yearLayout = new LinearLayout(context);
+        yearLayout.setOrientation(LinearLayout.VERTICAL);
+        {
+            LinearLayout.LayoutParams dimensions;
+            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 2f);
+            yearLayout.setLayoutParams(dimensions);
+        }
+        Button yearIncrement = new Button(context);
+        yearIncrement.setText("^");
+        Button yearDecrement = new Button(context);
+        yearDecrement.setText("v");
+        EditText yearText = new EditText(context);
+        yearText.setRawInputType(TYPE_CLASS_NUMBER);
+        yearText.setText(Integer.valueOf(year).toString());
+        yearText.setMaxEms(4);
+        yearLayout.addView(yearIncrement);
+        yearLayout.addView(yearText);
+        yearLayout.addView(yearDecrement);
+
+        linearLayout.addView(monthLayout);
+        linearLayout.addView(dayLayout);
+        linearLayout.addView(yearLayout);
+
+        return new DateChoiceHandler(yearText, monthText, dayText, yearIncrement, yearDecrement, monthIncrement,
+                monthDecrement, dayIncrement, dayDecrement, linearLayout);
+    }
+
+    public static View makeView(final String name, Context context, final OnGroupRemovalListener listener){
+        final LinearLayout linearLayout = makeLinearLayoutWrapper(context);
+        linearLayout.setBackgroundResource(R.drawable.groupbackground);
 
         TextView groupName = new TextView(context);
         groupName.setText(name);
@@ -64,22 +141,11 @@ public class ViewFactory {
         });
 
         return linearLayout;
-
     }
 
     public static View makeView(Context context, final OnGroupRemovalListener listener) {
-        final LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setVisibility(View.VISIBLE);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        final LinearLayout linearLayout = makeLinearLayoutWrapper(context);
         linearLayout.setBackgroundResource(R.drawable.groupbackground);
-        linearLayout.setPadding(PADDING, PADDING, PADDING, PADDING);
-        {
-            LinearLayout.LayoutParams dimensions;
-            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            dimensions.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
-            linearLayout.setLayoutParams(dimensions);
-        }
 
         EditText groupName = new EditText(context);
         groupName.setHint("Name of this group...");
@@ -108,18 +174,8 @@ public class ViewFactory {
 
     public static View makeView(final Task task, final Context context)
     {
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setVisibility(View.VISIBLE);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        final LinearLayout linearLayout = makeLinearLayoutWrapper(context);
         linearLayout.setBackgroundResource(R.drawable.taskbackground);
-        linearLayout.setPadding(PADDING, PADDING, PADDING, PADDING);
-        {
-            LinearLayout.LayoutParams dimensions;
-            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            dimensions.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
-            linearLayout.setLayoutParams(dimensions);
-        }
 
         LinearLayout textLayout = new LinearLayout(context);
         {
@@ -190,6 +246,21 @@ public class ViewFactory {
             }
         });
 
+        return linearLayout;
+    }
+
+    private static LinearLayout makeLinearLayoutWrapper(Context context) {
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setVisibility(View.VISIBLE);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setPadding(PADDING, PADDING, PADDING, PADDING);
+        {
+            LinearLayout.LayoutParams dimensions;
+            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            dimensions.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
+            linearLayout.setLayoutParams(dimensions);
+        }
         return linearLayout;
     }
 }

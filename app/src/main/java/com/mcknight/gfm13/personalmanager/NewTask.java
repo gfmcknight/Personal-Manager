@@ -48,14 +48,21 @@ public class NewTask extends AppCompatActivity implements AdapterView.OnItemClic
 
         String taskName = ((EditText)findViewById(R.id.taskName)).getText().toString();
         String taskDescription = ((EditText)findViewById(R.id.taskDescription)).getText().toString();
+        String groupName = ((EditText)findViewById(R.id.groupSelection)).getText().toString();
         float timeEstimate = 1;
         try {
             timeEstimate = Float.parseFloat(((EditText) findViewById(R.id.timeEstimate)).getText().toString());
         } catch (NumberFormatException e)
         {
-            timeEstimate = 1;
+            String[] timeSections = ((EditText) findViewById(R.id.timeEstimate)).getText().toString().split(":");
+            if (timeSections.length == 2){
+                try {
+                    timeEstimate = Float.parseFloat(timeSections[0]) + Float.parseFloat(timeSections[1]) / 60;
+
+                } catch (NumberFormatException f) {}
+            }
         }
-        Task newTask = new Task(taskName, "", taskDescription, timeEstimate, 0f,
+        Task newTask = new Task(taskName, groupName, taskDescription, timeEstimate, 0f,
                 datePicker.getYear(), datePicker.getMonth(), datePicker.getDay(),
                 TaskManager.getInstance().getNewID());
         TaskManager.getInstance().addTask(newTask);
@@ -65,12 +72,10 @@ public class NewTask extends AppCompatActivity implements AdapterView.OnItemClic
         finish();
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view,
                             int position, long id) {
         ((EditText)findViewById(R.id.groupSelection)).setText(GroupManager.getInstance().getGroup(position));
         groupsPopupWindow.dismiss();
     }
-
 }

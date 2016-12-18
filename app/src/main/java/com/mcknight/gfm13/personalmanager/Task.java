@@ -117,4 +117,43 @@ public class Task {
     public void setTimeWorked(float timeWorked) {
         this.timeWorked = timeWorked;
     }
+
+    public int getYearDue() {
+        return yearDue;
+    }
+
+    public void setYearDue(int yearDue) {
+        this.yearDue = yearDue;
+        Calendar dateSetter = Calendar.getInstance();
+        dateSetter.set(Calendar.YEAR, yearDue);
+        dateSetter.set(Calendar.MONTH, monthDue);
+        dateSetter.set(Calendar.DAY_OF_MONTH, dayDue);
+        dateDue = dateSetter.getTime();
+    }
+
+    public int getMonthDue() {
+        return monthDue;
+    }
+
+    public void setMonthDue(int monthDue) {
+        this.monthDue = monthDue;
+        Calendar dateSetter = Calendar.getInstance();
+        dateSetter.set(Calendar.YEAR, yearDue);
+        dateSetter.set(Calendar.MONTH, monthDue);
+        dateSetter.set(Calendar.DAY_OF_MONTH, dayDue);
+        dateDue = dateSetter.getTime();
+    }
+
+    public int getDayDue() {
+        return dayDue;
+    }
+
+    public void setDayDue(int dayDue) {
+        this.dayDue = dayDue;
+        Calendar dateSetter = Calendar.getInstance();
+        dateSetter.set(Calendar.YEAR, yearDue);
+        dateSetter.set(Calendar.MONTH, monthDue);
+        dateSetter.set(Calendar.DAY_OF_MONTH, dayDue);
+        dateDue = dateSetter.getTime();
+    }
 }

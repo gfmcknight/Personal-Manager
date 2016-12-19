@@ -14,6 +14,8 @@ import com.mcknight.gfm13.personalmanager.Groups.OnGroupRemovalListener;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
+import com.mcknight.gfm13.personalmanager.WorkItems.ItemManager;
+import com.mcknight.gfm13.personalmanager.WorkItems.Task;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -188,11 +190,11 @@ public class ViewFactory {
         linearLayout.addView(textLayout);
 
         TextView taskSubject = new TextView(context);
-        taskSubject.setText(task.getName() + ": " + (Math.round((task.getHoursEstimate() - task.getTimeWorked()) * 10))/10 + "hrs");
+        taskSubject.setText(task.getName() + ": " + (Math.round(task.getHoursEstimate() * 10))/10 + "hrs");
         taskSubject.setTextSize(18.0f);
         taskSubject.setTextColor(Color.BLACK);
 
-        String[] date = task.dateDue.toString().split(" ");
+        String[] date = task.getDateDue().toString().split(" ");
         TextView taskDescription = new TextView(context);
         taskDescription.setText(date[0] + " " + date[1]+ " " + date[2] + "\n"+ task.getDescription());
         taskDescription.setTextSize(12.0f);
@@ -240,8 +242,8 @@ public class ViewFactory {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TaskManager.getInstance().RemoveTask(task);
-                TaskManager.getInstance().commit();
+                ItemManager.getTaskManager().removeTask(task);
+                ItemManager.getTaskManager().commit();
                 RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.DELETE, task));
             }
         });

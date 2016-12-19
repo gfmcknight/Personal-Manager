@@ -1,6 +1,6 @@
 package com.mcknight.gfm13.personalmanager.Refreshing;
 
-import com.mcknight.gfm13.personalmanager.Task;
+import com.mcknight.gfm13.personalmanager.WorkItems.Task;
 
 /**
  * Created by gfm13 on 10/29/2016.

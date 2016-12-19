@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.mcknight.gfm13.personalmanager.Groups.GroupManager;
 import com.mcknight.gfm13.personalmanager.Groups.GroupsEditor;
+import com.mcknight.gfm13.personalmanager.WorkItems.ItemManager;
 
 public class MainActivity extends AppCompatActivity implements ElementDisplayFragment.OnFragmentInteractionListener {
 
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TaskManager.getInstance().init(this);
+        ItemManager.getTaskManager().init(this);
         GroupManager.getInstance().init(this);
 
         super.onCreate(savedInstanceState);

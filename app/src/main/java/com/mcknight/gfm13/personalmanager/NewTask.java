@@ -13,6 +13,8 @@ import com.mcknight.gfm13.personalmanager.Groups.GroupManager;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
+import com.mcknight.gfm13.personalmanager.WorkItems.ItemManager;
+import com.mcknight.gfm13.personalmanager.WorkItems.Task;
 
 
 public class NewTask extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -64,9 +66,9 @@ public class NewTask extends AppCompatActivity implements AdapterView.OnItemClic
         }
         Task newTask = new Task(taskName, groupName, taskDescription, timeEstimate, 0f,
                 datePicker.getYear(), datePicker.getMonth(), datePicker.getDay(),
-                TaskManager.getInstance().getNewID());
-        TaskManager.getInstance().addTask(newTask);
-        TaskManager.getInstance().commit();
+                ItemManager.getTaskManager().getNewID());
+        ItemManager.getTaskManager().addTask(newTask);
+        ItemManager.getTaskManager().commit();
 
         RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.ADD, newTask));
         finish();

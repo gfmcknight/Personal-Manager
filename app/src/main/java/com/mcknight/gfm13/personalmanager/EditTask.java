@@ -1,6 +1,5 @@
 package com.mcknight.gfm13.personalmanager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
@@ -14,6 +13,8 @@ import com.mcknight.gfm13.personalmanager.Groups.GroupManager;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
+import com.mcknight.gfm13.personalmanager.WorkItems.ItemManager;
+import com.mcknight.gfm13.personalmanager.WorkItems.Task;
 
 public class EditTask extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -30,7 +31,7 @@ public class EditTask extends AppCompatActivity implements AdapterView.OnItemCli
         setSupportActionBar(toolbar);
 
         int taskID = getIntent().getIntExtra(getString(R.string.edit_ID), 0);
-        task = TaskManager.getInstance().getTaskByID(taskID);
+        task = ItemManager.getTaskManager().getItemByID(taskID);
 
         ((EditText)findViewById(R.id.taskName)).setText(task.getName());
         ((EditText)findViewById(R.id.taskDescription)).setText(task.getDescription());
@@ -79,7 +80,7 @@ public class EditTask extends AppCompatActivity implements AdapterView.OnItemCli
         }
 
 
-        TaskManager.getInstance().commit();
+        ItemManager.getTaskManager().commit();
 
         RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.EDIT, task));
         finish();

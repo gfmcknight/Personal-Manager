@@ -28,7 +28,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Groups.GroupsEditor"
-            android:label="@string/title_activity_groups_editor"></activity>
+            android:label="@string/title_activity_groups_editor" />
+        <activity
+            android:name=".NewProject"
+            android:label="@string/title_activity_new_project"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

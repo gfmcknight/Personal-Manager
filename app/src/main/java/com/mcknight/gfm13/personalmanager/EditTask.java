@@ -37,9 +37,7 @@ public class EditTask extends AppCompatActivity implements AdapterView.OnItemCli
         ((EditText)findViewById(R.id.taskDescription)).setText(task.getDescription());
         ((EditText)findViewById(R.id.groupSelection)).setText(task.getGroupName());
 
-        int roundedTimeEstimate = (int)task.getHoursEstimate();
-        ((EditText)findViewById(R.id.timeEstimate)).setText(roundedTimeEstimate + ":" +
-                (int)((task.getHoursEstimate() - roundedTimeEstimate) * 60));
+        ((EditText)findViewById(R.id.timeEstimate)).setText(Float.valueOf(task.getHoursEstimate()).toString());
 
         groupsPopupWindow = GroupManager.getInstance().getGroupsAdapter(this, this);
 

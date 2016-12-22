@@ -1,6 +1,7 @@
 package com.mcknight.gfm13.personalmanager;
 
 import android.os.Bundle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
@@ -14,10 +15,11 @@ import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
 import com.mcknight.gfm13.personalmanager.WorkItems.ItemManager;
-import com.mcknight.gfm13.personalmanager.WorkItems.Task;
+import com.mcknight.gfm13.personalmanager.WorkItems.Project;
 
+import java.util.ArrayList;
 
-public class NewTask extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class NewProject extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ListPopupWindow groupsPopupWindow;
     DateChoiceHandler datePicker;
@@ -25,7 +27,7 @@ public class NewTask extends AppCompatActivity implements AdapterView.OnItemClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_task);
+        setContentView(R.layout.activity_new_project);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,31 +48,37 @@ public class NewTask extends AppCompatActivity implements AdapterView.OnItemClic
         ((LinearLayout)findViewById(R.id.datePicker)).addView(datePicker.getLayout());
     }
 
-    public void submitPressed(View view){
+    public void addButtonPressed(View view) {
+        LinearLayout stepList = ((LinearLayout)findViewById(R.id.stepLayout));
+        stepList.addView(ViewFactory.makeStepView(this, stepList));
+    }
 
-        String taskName = ((EditText)findViewById(R.id.taskName)).getText().toString();
-        String taskDescription = ((EditText)findViewById(R.id.taskDescription)).getText().toString();
+    public void submitPressed (View view) {
+        String name = ((EditText)findViewById(R.id.projectName)).getText().toString();
         String groupName = ((EditText)findViewById(R.id.groupSelection)).getText().toString();
-        float timeEstimate = 1;
-        try {
-            timeEstimate = Float.parseFloat(((EditText) findViewById(R.id.timeEstimate)).getText().toString());
-        } catch (NumberFormatException e)
-        {
-            String[] timeSections = ((EditText) findViewById(R.id.timeEstimate)).getText().toString().split(":");
-            if (timeSections.length == 2){
-                try {
-                    timeEstimate = Float.parseFloat(timeSections[0]) + Float.parseFloat(timeSections[1]) / 60;
 
-                } catch (NumberFormatException f) {}
+        ArrayList<String> steps = new ArrayList<>();
+        ArrayList<Double> timeEstimates = new ArrayList<>();
+        ArrayList<Boolean> completed = new ArrayList<>();
+
+        LinearLayout stepList = ((LinearLayout)findViewById(R.id.stepLayout));
+
+        for (int i = 0; i < stepList.getChildCount(); i++){
+            steps.add(((EditText)((LinearLayout)stepList.getChildAt(i)).getChildAt(1)).getText().toString());
+            try {
+                timeEstimates.add(Double.parseDouble(((EditText)((LinearLayout)stepList.getChildAt(i)).getChildAt(2)).getText().toString()));
+            } catch (NumberFormatException e) {
+                timeEstimates.add(1d);
             }
-        }
-        Task newTask = new Task(taskName, groupName, taskDescription, timeEstimate,
-                datePicker.getYear(), datePicker.getMonth(), datePicker.getDay(),
-                ItemManager.getTaskManager().getNewID());
-        ItemManager.getTaskManager().addItem(newTask);
-        ItemManager.getTaskManager().commit();
 
-        RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.ADD, newTask));
+            completed.add(false);
+        }
+
+        Project newProject = new Project(name, groupName, datePicker.getYear(), datePicker.getMonth(), datePicker.getDay(),
+                ItemManager.getProjectManager().getNewID(), steps, timeEstimates, completed);
+        ItemManager.getProjectManager().addItem(newProject);
+        ItemManager.getProjectManager().commit();
+        RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.ADD, newProject));
         finish();
     }
 
@@ -80,4 +88,5 @@ public class NewTask extends AppCompatActivity implements AdapterView.OnItemClic
         ((EditText)findViewById(R.id.groupSelection)).setText(GroupManager.getInstance().getGroup(position));
         groupsPopupWindow.dismiss();
     }
+
 }

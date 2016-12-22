@@ -1,11 +1,11 @@
 package com.mcknight.gfm13.personalmanager.WorkItems;
 
-import com.mcknight.gfm13.personalmanager.WorkItems.WorkItem;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -17,12 +17,12 @@ public class Project extends WorkItem {
     private int id;
     private float timeWorked;
 
-    private LinkedList<String> steps;
-    private LinkedList<Double> timeEstimates;
-    private LinkedList<Boolean> completed;
+    private List<String> steps;
+    private List<Double> timeEstimates;
+    private List<Boolean> completed;
 
-    public Project(String name, String groupName, int yearDue, int monthDue, int dayDue, int id, LinkedList<String> steps,
-                   LinkedList<Double> timeEstimates, LinkedList<Boolean> completed){
+    public Project(String name, String groupName, int yearDue, int monthDue, int dayDue, int id, List<String> steps,
+                   List<Double> timeEstimates, List<Boolean> completed){
         super(name, groupName, yearDue, monthDue, dayDue, id);
         this.steps = steps;
         this.timeEstimates = timeEstimates;
@@ -33,9 +33,9 @@ public class Project extends WorkItem {
         super(object);
         int numberOfSteps = object.getInt("NumberOfSteps");
 
-        steps = new LinkedList<String>();
-        timeEstimates =  new LinkedList<Double>();
-        completed = new LinkedList<Boolean>();
+        steps = new ArrayList<>();
+        timeEstimates =  new ArrayList<>();
+        completed = new ArrayList<>();
 
         for (int i = 0 ; i < numberOfSteps; i++) {
             steps.add(object.getString("StepName" + i));

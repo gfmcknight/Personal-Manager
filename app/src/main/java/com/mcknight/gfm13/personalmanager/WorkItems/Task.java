@@ -12,7 +12,7 @@ public class Task extends WorkItem {
     private String description;
     private float hoursEstimate;
 
-    public Task(String name, String groupName, String description, float hoursEstimate, float timeWorked,
+    public Task(String name, String groupName, String description, float hoursEstimate,
                 int yearDue, int monthDue, int dayDue, int id) {
 
         super(name, groupName, yearDue, monthDue, dayDue, id);
@@ -45,8 +45,8 @@ public class Task extends WorkItem {
 
     public Task (JSONObject object) throws JSONException {
         this(object.getString("Name"), object.getString("Group"), object.getString("Description"),
-            (float)object.getDouble("HoursEstimate"), (float)object.getDouble("TimeWorked"),
-            object.getInt("Year"), object.getInt("Month"), object.getInt("Day"), object.getInt("Id"));
+            (float)object.getDouble("HoursEstimate"), object.getInt("Year"), object.getInt("Month"),
+            object.getInt("Day"), object.getInt("Id"));
     }
 
 

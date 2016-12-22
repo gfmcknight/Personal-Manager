@@ -49,7 +49,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="time"
+                android:inputType="number"
                 android:ems="10"
                 android:id="@+id/timeEstimate"
                 android:hint="@string/time_est_hint" />

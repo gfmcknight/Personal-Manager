@@ -1,5 +1,6 @@
 package com.mcknight.gfm13.personalmanager.Refreshing;
 
+import com.mcknight.gfm13.personalmanager.WorkItems.Project;
 import com.mcknight.gfm13.personalmanager.WorkItems.Task;
 
 /**
@@ -15,7 +16,7 @@ public class RefreshEvent {
    private int itemID;
 
     private Task affectedTask;
-    //private Project affectedProject;
+    private Project affectedProject;
 
     public RefreshEventType getEventType() {
         return type;
@@ -49,6 +50,14 @@ public class RefreshEvent {
         affectsTask = true;
         affectsProject = false;
         itemID = affectedTask.getId();
+    }
+
+    public RefreshEvent(RefreshEventType type, Project affectedProject) {
+        this.affectedProject = affectedProject;
+        this.type = type;
+        affectsTask = false;
+        affectsProject = true;
+        itemID = affectedProject.getId();
     }
 
     public RefreshEvent(RefreshEventType type, int affectedItemID) {

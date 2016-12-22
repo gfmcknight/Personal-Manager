@@ -3,7 +3,6 @@ package com.mcknight.gfm13.personalmanager.Groups;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -29,7 +28,7 @@ public class GroupsEditor extends AppCompatActivity implements OnGroupRemovalLis
 
         for(int i = 0; i < groups.size(); i++)
         {
-            oldGroups.addView(ViewFactory.makeView(groups.get(i), this, this));
+            oldGroups.addView(ViewFactory.makeGroupItemView(groups.get(i), this, this));
         }
     }
 
@@ -44,8 +43,9 @@ public class GroupsEditor extends AppCompatActivity implements OnGroupRemovalLis
     }
 
     public void addButtonPressed(View view) {
-        newGroups.addView(ViewFactory.makeView(this, this));
+        newGroups.addView(ViewFactory.makeGroupItemView(this, this));
     }
+
     public void submitPressed (View view) {
         for (String group: removedGroups) {
             GroupManager.getInstance().removeGroup(group);
@@ -59,6 +59,7 @@ public class GroupsEditor extends AppCompatActivity implements OnGroupRemovalLis
                         ((EditText)newGroupView.getChildAt(0)).getText().toString());
             }
         }
+        finish();
     }
 
 

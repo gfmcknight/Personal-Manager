@@ -17,10 +17,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ItemManager<T extends WorkItem>  {
-    private static ItemManager taskManager = new ItemManager<Task>(new TaskFactory(), "Tasks");
+    private static ItemManager<Task> taskManager = new ItemManager<>(new TaskFactory(), "Tasks");
+    private static ItemManager<Project> projectManager = new ItemManager<>(new ProjectFactory(), "Projects");
 
     public static ItemManager<Task> getTaskManager() {
         return taskManager;
+    }
+    public static ItemManager<Project> getProjectManager() {
+        return projectManager;
     }
 
     private Context context;
@@ -79,12 +83,12 @@ public class ItemManager<T extends WorkItem>  {
         return itemList;
     }
 
-    public void removeTask(T item)
+    public void removeItem(T item)
     {
         getItems().remove(item);
     }
 
-    public void addTask(T item)
+    public void addItem(T item)
     {
         getItems().add(item);
     }

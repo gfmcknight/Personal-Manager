@@ -22,7 +22,7 @@ public class TaskDisplay extends ElementDisplayFragment {
         int numberOfTasks = ItemManager.getTaskManager().getItems().size();
         for (int i = 0; i < numberOfTasks; i++)
         {
-            elements.add(ViewFactory.makeView(tasks.get(i), getContext()));
+            elements.add(ViewFactory.makeTaskView(tasks.get(i), getContext()));
         }
 
         return elements;

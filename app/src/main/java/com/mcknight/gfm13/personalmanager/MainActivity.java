@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ItemManager.getTaskManager().init(this);
+        ItemManager.getProjectManager().init(this);
         GroupManager.getInstance().init(this);
 
         super.onCreate(savedInstanceState);
@@ -94,8 +95,13 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
             startActivity(intent);
             return true;
         }
-        if (id == R.id.action_new_task){
+        if (id == R.id.action_new_task) {
             Intent intent = new Intent(this, NewTask.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_new_project) {
+            Intent intent = new Intent(this, NewProject.class);
             startActivity(intent);
             return true;
         }

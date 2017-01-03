@@ -120,22 +120,25 @@ public abstract class ElementDisplayFragment extends Fragment implements IRefres
     }
 
     private void refresh() {
-        LinearLayout linearLayout = (LinearLayout)getView().findViewById(R.id.linear_task_layout);
+        if (getView() != null) {
+            LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.linear_task_layout);
+            TextView pageTitleTextView = ((TextView) getView().findViewById(R.id.page_title));
 
-        if (taskViews != null) {
-            for (View view : taskViews) {
-                linearLayout.removeView(view);
+            if (taskViews != null) {
+                for (View view : taskViews) {
+                    linearLayout.removeView(view);
+                }
             }
-        }
 
-        taskViews = getPageElements();
+            taskViews = getPageElements();
 
-        for (View view: taskViews) {
-            linearLayout.addView(view);
-        }
-        if (taskViews != null) {
-            ((TextView) getView().findViewById(R.id.page_title)).setText(pageTitle + " (" +
-                    taskViews.size() + "):");
+            for (View view : taskViews) {
+                linearLayout.addView(view);
+            }
+            if (taskViews != null) {
+                pageTitleTextView.setText(pageTitle + " (" +
+                        taskViews.size() + "):");
+            }
         }
     }
 

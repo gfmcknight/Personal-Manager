@@ -30,8 +30,8 @@ public class EditTask extends AppCompatActivity implements AdapterView.OnItemCli
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        int taskID = getIntent().getIntExtra(getString(R.string.edit_ID), 0);
-        task = ItemManager.getTaskManager().getItemByID(taskID);
+        int taskId = getIntent().getIntExtra(getString(R.string.edit_ID), 0);
+        task = ItemManager.getTaskManager().getItemByID(taskId);
 
         ((EditText)findViewById(R.id.taskName)).setText(task.getName());
         ((EditText)findViewById(R.id.taskDescription)).setText(task.getDescription());

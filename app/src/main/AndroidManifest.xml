@@ -32,6 +32,10 @@
         <activity
             android:name=".NewProject"
             android:label="@string/title_activity_new_project"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditProject"
+            android:label="@string/title_activity_edit_project"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

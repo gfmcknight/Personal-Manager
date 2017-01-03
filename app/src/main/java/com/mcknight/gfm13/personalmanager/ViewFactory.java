@@ -16,10 +16,13 @@ import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
 import com.mcknight.gfm13.personalmanager.WorkItems.ItemManager;
+import com.mcknight.gfm13.personalmanager.WorkItems.Project;
 import com.mcknight.gfm13.personalmanager.WorkItems.Task;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 
@@ -32,6 +35,7 @@ public class ViewFactory {
     private static final int PADDING = 12;
     private static final int MARGIN = 2;
     private static final int TASK_LENGTH_CUTOFF = 425;
+    private static final int ICON_SIZE = 30;
 
     public static DateChoiceHandler makeDateView(Context context) {
         Date currentDate = new Date(System.currentTimeMillis());
@@ -132,8 +136,8 @@ public class ViewFactory {
         linearLayout.addView(groupName);
 
         Button removeButton = new Button(context);
-        removeButton.setLayoutParams(new ViewGroup.LayoutParams((int)(40 * MainActivity.DP_PIXEL_SCALING),
-                (int)(40 * MainActivity.DP_PIXEL_SCALING)));
+        removeButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
         removeButton.setBackgroundResource(R.drawable.delete);
         linearLayout.addView(removeButton);
         removeButton.setOnClickListener(new View.OnClickListener() {
@@ -161,8 +165,8 @@ public class ViewFactory {
         linearLayout.addView(groupName);
 
         Button removeButton = new Button(context);
-        removeButton.setLayoutParams(new ViewGroup.LayoutParams((int)(40 * MainActivity.DP_PIXEL_SCALING),
-                (int)(40* MainActivity.DP_PIXEL_SCALING)));
+        removeButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
         removeButton.setBackgroundResource(R.drawable.delete);
         linearLayout.addView(removeButton);
         removeButton.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +201,13 @@ public class ViewFactory {
 
         String[] date = task.getDateDue().toString().split(" ");
         TextView taskDescription = new TextView(context);
-        taskDescription.setText(date[0] + " " + date[1]+ " " + date[2] + "\n"+ task.getDescription());
+
+        if (!task.getGroupName().equals("")) {
+            taskDescription.setText(date[0] + " " + date[1]+ " " + date[2] + " for " + task.getGroupName() +
+                    "\n"+ task.getDescription());
+        } else {
+            taskDescription.setText(date[0] + " " + date[1] + " " + date[2] + "\n" + task.getDescription());
+        }
         taskDescription.setTextSize(12.0f);
         taskDescription.setTextColor(Color.GRAY);
 
@@ -218,26 +228,27 @@ public class ViewFactory {
         }
 
         Button startButton = new Button(context);
-        startButton.setLayoutParams(new ViewGroup.LayoutParams((int)(40 * MainActivity.DP_PIXEL_SCALING),
-                (int)(40 * MainActivity.DP_PIXEL_SCALING)));
+        startButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
         buttonLayout.addView(startButton);
 
         Button editButton = new Button(context);
-        editButton.setLayoutParams(new ViewGroup.LayoutParams((int)(40 * MainActivity.DP_PIXEL_SCALING),
-                (int)(40 * MainActivity.DP_PIXEL_SCALING)));
+        editButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
         editButton.setBackgroundResource(R.drawable.edit);
         buttonLayout.addView(editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, EditTask.class);
+                intent.putExtra(context.getString(R.string.edit_ID), task.getId());
                 context.startActivity(intent);
             }
         });
 
         Button deleteButton = new Button(context);
-        deleteButton.setLayoutParams(new ViewGroup.LayoutParams((int)(40 * MainActivity.DP_PIXEL_SCALING),
-                (int)(40* MainActivity.DP_PIXEL_SCALING)));
+        deleteButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
         deleteButton.setBackgroundResource(R.drawable.delete);
         buttonLayout.addView(deleteButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +263,153 @@ public class ViewFactory {
         return linearLayout;
     }
 
-    public static LinearLayout makeStepView(Context context, final LinearLayout parent) {
+    public static LinearLayout makeProjectView(final Project project, final Context context) {
+        final LinearLayout linearLayout = makeLinearLayoutWrapper(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setBackgroundResource(R.drawable.taskbackground);
+
+        LinearLayout header = new LinearLayout(context);
+        {
+            LinearLayout.LayoutParams dimensions;
+            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            header.setLayoutParams(dimensions);
+        }
+
+        LinearLayout titleHolder = new LinearLayout(context);
+        titleHolder.setOrientation(LinearLayout.HORIZONTAL);
+        {
+            LinearLayout.LayoutParams dimensions = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            titleHolder.setLayoutParams(dimensions);
+        }
+
+        TextView title = new TextView(context);
+        title.setText(project.getName() + " for " + project.getGroupName() + " " +
+                Integer.valueOf((int)project.getCompletion()).toString() + "%");
+        title.setTextSize(18.0f);
+        title.setTextColor(Color.BLACK);
+        titleHolder.addView(title);
+
+        Button editButton = new Button(context);
+        editButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
+        editButton.setBackgroundResource(R.drawable.edit);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, EditProject.class);
+                intent.putExtra(context.getString(R.string.edit_ID), project.getId());
+                context.startActivity(intent);
+            }
+        });
+
+        Button deleteButton = new Button(context);
+        deleteButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
+        deleteButton.setBackgroundResource(R.drawable.delete);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ItemManager.getProjectManager().removeItem(project);
+                ItemManager.getProjectManager().commit();
+                RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.DELETE, project));
+            }
+        });
+
+
+        final Button showButton = new Button(context);
+        deleteButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
+        showButton.setText("v");
+
+
+        header.addView(titleHolder);
+        header.addView(editButton);
+        header.addView(deleteButton);
+        header.addView(showButton);
+        linearLayout.addView(header);
+
+        final List<LinearLayout> stepViews = new ArrayList<>();
+        final List<String> stepNames = project.getSteps();
+        final List<Double> stepLengths = project.getTimeEstimates();
+        final List<Boolean> stepsCompleted = project.getCompleted();
+
+        for (int i = 0; i < stepNames.size(); i++) {
+            LinearLayout stepLayout = new LinearLayout(context);
+            {
+                LinearLayout.LayoutParams dimensions = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                stepLayout.setLayoutParams(dimensions);
+            }
+
+            final Button completionButton = new Button(context);
+            if (stepsCompleted.get(i)) {
+                completionButton.setText("O");
+            } else {
+                completionButton.setText("X");
+            }
+
+            final int finalI = i;
+            completionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    project.toggleCompletion(finalI);
+                    if (stepsCompleted.get(finalI)) {
+                        completionButton.setText("O");
+                    } else {
+                        completionButton.setText("X");
+                    }
+                    ItemManager.getProjectManager().commit();
+                    //RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.EDIT, project));
+                }
+            });
+            TextView stepDescription = new TextView(context);
+            stepDescription.setText(stepNames.get(i) + ": " + (int)(double)(stepLengths.get(i)) + "hrs");
+
+            stepLayout.addView(completionButton);
+            stepLayout.addView(stepDescription);
+
+            stepViews.add(stepLayout);
+            linearLayout.addView(stepLayout);
+            stepLayout.setVisibility(View.GONE);
+        }
+
+        final View.OnClickListener showAction;
+
+        showAction = new View.OnClickListener() {
+            boolean stepsShown = false;
+
+            public void onClick(View view) {
+                if (stepsShown) {
+                    hideSteps();
+                } else {
+                    showSteps();
+                }
+                stepsShown = !stepsShown;
+            }
+
+            public void hideSteps() {
+                showButton.setText("v");
+                for (LinearLayout stepLayout: stepViews) {
+                    stepLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void showSteps() {
+                showButton.setText("^");
+                for (LinearLayout stepLayout: stepViews) {
+                    stepLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
+        showButton.setOnClickListener(showAction);
+
+        return linearLayout;
+    }
+
+    public static LinearLayout makeStepView(Context context, final LinearLayout parent, String name, double time) {
         final LinearLayout linearLayout = makeLinearLayoutWrapper(context);
 
         LinearLayout swapLayout = new LinearLayout(context);
@@ -294,6 +451,8 @@ public class ViewFactory {
         });
 
         EditText stepName = new EditText(context);
+        stepName.setText(name);
+        stepName.setHint("Name this step");
         {
             LinearLayout.LayoutParams layoutParams;
             layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -302,6 +461,10 @@ public class ViewFactory {
         }
 
         EditText stepTime = new EditText(context);
+        if (time != 0) {
+            stepTime.setText(Integer.valueOf((int)time).toString());
+        }
+        stepTime.setHint("Time");
         {
             LinearLayout.LayoutParams layoutParams;
             layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -311,8 +474,8 @@ public class ViewFactory {
         stepTime.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         Button deleteButton = new Button(context);
-        deleteButton.setLayoutParams(new ViewGroup.LayoutParams((int)(40 * MainActivity.DP_PIXEL_SCALING),
-                (int)(40* MainActivity.DP_PIXEL_SCALING)));
+        deleteButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
         deleteButton.setBackgroundResource(R.drawable.delete);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,6 +489,10 @@ public class ViewFactory {
         linearLayout.addView(stepTime);
         linearLayout.addView(deleteButton);
         return linearLayout;
+    }
+
+    public static LinearLayout makeStepView(Context context, final LinearLayout parent) {
+        return (makeStepView(context, parent, "", 0));
     }
 
     private static LinearLayout makeLinearLayoutWrapper(Context context) {

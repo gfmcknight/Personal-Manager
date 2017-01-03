@@ -14,9 +14,6 @@ import java.util.List;
 
 public class Project extends WorkItem {
 
-    private int id;
-    private float timeWorked;
-
     private List<String> steps;
     private List<Double> timeEstimates;
     private List<Boolean> completed;
@@ -57,5 +54,58 @@ public class Project extends WorkItem {
         } catch (JSONException e) {
             return null;
         }
+    }
+
+    public double getCompletion(){
+        double completedHours = 0d;
+        double totalHours = 0d;
+        for (int i = 0; i < steps.size(); i++) {
+            totalHours += timeEstimates.get(i);
+            if (completed.get(i)){
+                completedHours += timeEstimates.get(i);
+            }
+        }
+        if (completedHours == 0) {
+            return 0;
+        } else {
+            return completedHours / totalHours;
+        }
+    }
+
+    public void updateSteps(List<String> steps, List<Double> timeEstimates) {
+        List<String> completedSteps = new LinkedList<>();
+        for(int i = 0; i < completed.size(); i++) {
+            if (completed.get(i)) {
+                completedSteps.add(this.steps.get(i));
+            }
+        }
+
+        this.steps = steps;
+        this.timeEstimates = timeEstimates;
+        completed.clear();
+
+        for (int i = 0; i < steps.size(); i++) {
+            if (completedSteps.contains(completed.get(i))) {
+                completed.add(true);
+            } else {
+                completed.add(false);
+            }
+        }
+    }
+
+    public List<String> getSteps() {
+        return steps;
+    }
+
+    public List<Double> getTimeEstimates() {
+        return timeEstimates;
+    }
+
+    public List<Boolean> getCompleted() {
+        return completed;
+    }
+
+    public void toggleCompletion(int index) {
+        completed.set(index, !completed.get(index));
     }
 }

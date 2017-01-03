@@ -24,7 +24,7 @@ public abstract class WorkItem {
     public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("name", getName());
+            jsonObject.put("Name", getName());
             jsonObject.put("Group", getGroupName());
             jsonObject.put("Year", getYearDue());
             jsonObject.put("Month", getMonthDue());
@@ -46,6 +46,8 @@ public abstract class WorkItem {
         setMonthDue(monthDue);
         setDayDue(dayDue);
 
+        setId(id);
+
         Calendar dateSetter = Calendar.getInstance();
         dateSetter.set(Calendar.YEAR, yearDue);
         dateSetter.set(Calendar.MONTH, monthDue);
@@ -55,7 +57,8 @@ public abstract class WorkItem {
 
     public WorkItem(JSONObject object) throws JSONException
     {
-
+        this(object.getString("Name"), object.getString("Group"), object.getInt("Year"), object.getInt("Month"),
+                object.getInt("Day"), object.getInt("Id"));
     }
 
     private void setId(int id) {

@@ -85,7 +85,7 @@ public class Project extends WorkItem {
         completed.clear();
 
         for (int i = 0; i < steps.size(); i++) {
-            if (completedSteps.contains(completed.get(i))) {
+            if (completedSteps.contains(steps.get(i))) {
                 completed.add(true);
             } else {
                 completed.add(false);

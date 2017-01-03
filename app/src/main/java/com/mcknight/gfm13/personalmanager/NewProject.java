@@ -64,9 +64,9 @@ public class NewProject extends AppCompatActivity implements AdapterView.OnItemC
         LinearLayout stepList = ((LinearLayout)findViewById(R.id.stepLayout));
 
         for (int i = 0; i < stepList.getChildCount(); i++){
-            steps.add(((EditText)((LinearLayout)stepList.getChildAt(i)).getChildAt(1)).getText().toString());
+            steps.add(((EditText)((LinearLayout)stepList.getChildAt(i)).getChildAt(2)).getText().toString());
             try {
-                timeEstimates.add(Double.parseDouble(((EditText)((LinearLayout)stepList.getChildAt(i)).getChildAt(2)).getText().toString()));
+                timeEstimates.add(Double.parseDouble(((EditText)((LinearLayout)stepList.getChildAt(i)).getChildAt(3)).getText().toString()));
             } catch (NumberFormatException e) {
                 timeEstimates.add(1d);
             }

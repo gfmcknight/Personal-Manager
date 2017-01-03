@@ -3,6 +3,7 @@ package com.mcknight.gfm13.personalmanager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,10 @@ import static android.text.InputType.TYPE_CLASS_NUMBER;
 public class ViewFactory {
     private static final int PADDING = 12;
     private static final int MARGIN = 2;
-    private static final int TASK_LENGTH_CUTOFF = 425;
+    private static final int TASK_LENGTH_CUTOFF = 200;
     private static final int ICON_SIZE = 30;
+
+    private static Typeface TYPEFACE = Typeface.MONOSPACE;
 
     public static DateChoiceHandler makeDateView(Context context) {
         Date currentDate = new Date(System.currentTimeMillis());
@@ -59,10 +62,17 @@ public class ViewFactory {
             monthLayout.setLayoutParams(dimensions);
         }
         Button monthIncrement = new Button(context);
-        monthIncrement.setText("^");
+        monthIncrement.setBackgroundResource(R.drawable.up);
+        monthIncrement.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING) * 2,
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING * 0.5)));
+
         Button monthDecrement = new Button(context);
-        monthDecrement.setText("v");
+        monthDecrement.setBackgroundResource(R.drawable.down);
+        monthDecrement.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING) * 2,
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING * 0.5)));
+
         EditText monthText = new EditText(context);
+
         monthText.setInputType(TYPE_CLASS_NUMBER);
         monthText.setText(Integer.valueOf(month).toString());
         monthText.setMaxEms(2);
@@ -78,10 +88,17 @@ public class ViewFactory {
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
             monthLayout.setLayoutParams(dimensions);
         }
+
         Button dayIncrement = new Button(context);
-        dayIncrement.setText("^");
+        dayIncrement.setBackgroundResource(R.drawable.up);
+        dayIncrement.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING) * 2,
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING * 0.5)));
+
         Button dayDecrement = new Button(context);
-        dayDecrement.setText("v");
+        dayDecrement.setBackgroundResource(R.drawable.down);
+        dayDecrement.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING) * 2,
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING * 0.5)));
+
         EditText dayText = new EditText(context);
         dayText.setInputType(TYPE_CLASS_NUMBER);
         dayText.setText(Integer.valueOf(day).toString());
@@ -99,10 +116,17 @@ public class ViewFactory {
                     LinearLayout.LayoutParams.WRAP_CONTENT, 2f);
             yearLayout.setLayoutParams(dimensions);
         }
+
         Button yearIncrement = new Button(context);
-        yearIncrement.setText("^");
+        yearIncrement.setBackgroundResource(R.drawable.up);
+        yearIncrement.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING) * 2,
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING * 0.5)));
+
         Button yearDecrement = new Button(context);
-        yearDecrement.setText("v");
+        yearDecrement.setBackgroundResource(R.drawable.down);
+        yearDecrement.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING) * 2,
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING * 0.5)));
+
         EditText yearText = new EditText(context);
         yearText.setInputType(TYPE_CLASS_NUMBER);
         yearText.setText(Integer.valueOf(year).toString());
@@ -197,7 +221,8 @@ public class ViewFactory {
         TextView taskSubject = new TextView(context);
         taskSubject.setText(task.getName() + ": " + (Math.round(task.getHoursEstimate() * 10))/10 + "hrs");
         taskSubject.setTextSize(18.0f);
-        taskSubject.setTextColor(Color.BLACK);
+        taskSubject.setTextColor(context.getColor(R.color.titleColor));
+        taskSubject.setTypeface(TYPEFACE);
 
         String[] date = task.getDateDue().toString().split(" ");
         TextView taskDescription = new TextView(context);
@@ -209,7 +234,8 @@ public class ViewFactory {
             taskDescription.setText(date[0] + " " + date[1] + " " + date[2] + "\n" + task.getDescription());
         }
         taskDescription.setTextSize(12.0f);
-        taskDescription.setTextColor(Color.GRAY);
+        taskDescription.setTextColor(context.getColor(R.color.textColor));
+        taskDescription.setTypeface(TYPEFACE);
 
         textLayout.addView(taskSubject);
         textLayout.addView(taskDescription);
@@ -227,10 +253,19 @@ public class ViewFactory {
             linearLayout.addView(buttonLayout);
         }
 
-        Button startButton = new Button(context);
-        startButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+        Button doneButton = new Button(context);
+        doneButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
                 (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
-        buttonLayout.addView(startButton);
+        doneButton.setBackgroundResource(R.drawable.done);
+        buttonLayout.addView(doneButton);
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ItemManager.getTaskManager().removeItem(task);
+                ItemManager.getTaskManager().commit();
+                RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.FINISH, task));
+            }
+        });
 
         Button editButton = new Button(context);
         editButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
@@ -286,9 +321,10 @@ public class ViewFactory {
 
         TextView title = new TextView(context);
         title.setText(project.getName() + " for " + project.getGroupName() + " " +
-                Integer.valueOf((int)project.getCompletion()).toString() + "%");
+                Integer.valueOf((int)(project.getCompletion() * 100)).toString() + "%");
         title.setTextSize(18.0f);
-        title.setTextColor(Color.BLACK);
+        title.setTextColor(context.getColor(R.color.titleColor));
+        title.setTypeface(TYPEFACE);
         titleHolder.addView(title);
 
         Button editButton = new Button(context);
@@ -319,9 +355,9 @@ public class ViewFactory {
 
 
         final Button showButton = new Button(context);
-        deleteButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+        showButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
                 (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
-        showButton.setText("v");
+        showButton.setBackgroundResource(R.drawable.down);
 
 
         header.addView(titleHolder);
@@ -344,10 +380,12 @@ public class ViewFactory {
             }
 
             final Button completionButton = new Button(context);
+            completionButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                    (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
             if (stepsCompleted.get(i)) {
-                completionButton.setText("O");
+                completionButton.setBackgroundResource(R.drawable.complete);
             } else {
-                completionButton.setText("X");
+                completionButton.setBackgroundResource(R.drawable.incomplete);
             }
 
             final int finalI = i;
@@ -356,16 +394,17 @@ public class ViewFactory {
                 public void onClick(View view) {
                     project.toggleCompletion(finalI);
                     if (stepsCompleted.get(finalI)) {
-                        completionButton.setText("O");
+                        completionButton.setBackgroundResource(R.drawable.complete);
                     } else {
-                        completionButton.setText("X");
+                        completionButton.setBackgroundResource(R.drawable.incomplete);
                     }
                     ItemManager.getProjectManager().commit();
-                    //RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.EDIT, project));
                 }
             });
             TextView stepDescription = new TextView(context);
             stepDescription.setText(stepNames.get(i) + ": " + (int)(double)(stepLengths.get(i)) + "hrs");
+            stepDescription.setTextColor(context.getColor(R.color.textColor));
+            stepDescription.setTypeface(TYPEFACE);
 
             stepLayout.addView(completionButton);
             stepLayout.addView(stepDescription);
@@ -390,14 +429,14 @@ public class ViewFactory {
             }
 
             public void hideSteps() {
-                showButton.setText("v");
+                showButton.setBackgroundResource(R.drawable.down);
                 for (LinearLayout stepLayout: stepViews) {
                     stepLayout.setVisibility(View.GONE);
                 }
             }
 
             public void showSteps() {
-                showButton.setText("^");
+                showButton.setBackgroundResource(R.drawable.up);
                 for (LinearLayout stepLayout: stepViews) {
                     stepLayout.setVisibility(View.VISIBLE);
                 }
@@ -412,21 +451,20 @@ public class ViewFactory {
     public static LinearLayout makeStepView(Context context, final LinearLayout parent, String name, double time) {
         final LinearLayout linearLayout = makeLinearLayoutWrapper(context);
 
-        LinearLayout swapLayout = new LinearLayout(context);
-        swapLayout.setVisibility(View.VISIBLE);
-        swapLayout.setOrientation(LinearLayout.VERTICAL);
-        {
-            LinearLayout.LayoutParams dimensions;
-            dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            swapLayout.setLayoutParams(dimensions);
-        }
         Button swapUp = new Button(context);
-        swapUp.setText("^");
+        swapUp.setBackgroundResource(R.drawable.up);
+        swapUp.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
+
         Button swapDown = new Button(context);
-        swapDown.setText("v");
-        swapLayout.addView(swapUp);
-        swapLayout.addView(swapDown);
+        swapDown.setBackgroundResource(R.drawable.down);
+        swapDown.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));;
+
+
+        linearLayout.addView(swapUp);
+        linearLayout.addView(swapDown);
+
 
         swapUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -453,6 +491,8 @@ public class ViewFactory {
         EditText stepName = new EditText(context);
         stepName.setText(name);
         stepName.setHint("Name this step");
+        stepName.setTextColor(context.getColor(R.color.textColor));
+        stepName.setTypeface(TYPEFACE);
         {
             LinearLayout.LayoutParams layoutParams;
             layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -465,6 +505,8 @@ public class ViewFactory {
             stepTime.setText(Integer.valueOf((int)time).toString());
         }
         stepTime.setHint("Time");
+        stepTime.setTextColor(context.getColor(R.color.textColor));
+        stepTime.setTypeface(TYPEFACE);
         {
             LinearLayout.LayoutParams layoutParams;
             layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -484,7 +526,6 @@ public class ViewFactory {
             }
         });
 
-        linearLayout.addView(swapLayout);
         linearLayout.addView(stepName);
         linearLayout.addView(stepTime);
         linearLayout.addView(deleteButton);

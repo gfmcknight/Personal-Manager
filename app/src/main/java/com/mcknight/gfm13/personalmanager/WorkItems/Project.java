@@ -83,6 +83,14 @@ public class Project extends WorkItem {
         }
     }
 
+    public float getHoursEstimate() {
+        float result = 0;
+        for (int i = 0; i < timeEstimates.size(); i++) {
+            result += timeEstimates.get(i);
+        }
+        return result;
+    }
+
     public boolean isPriority() {
         double timePassedRatio = (double)(new Date().getTime() - getStartDate()) /
                 (getDateDue().getTime() - getStartDate());

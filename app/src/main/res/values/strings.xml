@@ -15,6 +15,10 @@
     <string name="all_tasks_message">Current elements:</string>
     <string name="select_group_hint">Select a group...</string>
     <string name="project_name_hint">Enter project name</string>
+    <string name="congrats">Congratulations!</string>
+    <string name="congrats_text">For completing %1$s, you have been awarded %2$d points. %3$s\n</string>
+    <string name="achievement_text">\nYou\'ve also completed the achievement: %1$s and have been awarded an additional %2$s points.\n</string>
+
 
     <string name="edit_ID">edit_ID</string>
     <string name="preference_file_key">Preferences</string>
@@ -29,5 +33,14 @@
         <item>by group</item>
         <item>by name</item>
         <item>by start date</item>
+    </string-array>
+
+    <string-array name="compliments">
+        <item>Keep it up!</item>
+        <item>Nice job!</item>
+        <item>Well done!</item>
+        <item>Great work!</item>
+        <item>Way to go!</item>
+        <item>What a star!</item>
     </string-array>
 </resources>

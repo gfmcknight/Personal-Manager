@@ -60,6 +60,7 @@ public class Task extends WorkItem {
         this.description = description;
     }
 
+    @Override
     public float getHoursEstimate() {
         return hoursEstimate;
     }

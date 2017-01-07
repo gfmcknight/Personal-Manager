@@ -1,8 +1,11 @@
 package com.mcknight.gfm13.personalmanager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -21,11 +24,19 @@ import android.widget.TextView;
 
 import com.mcknight.gfm13.personalmanager.Groups.GroupManager;
 import com.mcknight.gfm13.personalmanager.Groups.GroupsEditor;
+import com.mcknight.gfm13.personalmanager.Refreshing.IRefreshListener;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEventType;
+import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
 import com.mcknight.gfm13.personalmanager.WorkItems.ItemManager;
 
-public class MainActivity extends AppCompatActivity implements ElementDisplayFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ElementDisplayFragment.OnFragmentInteractionListener,
+        CongratsPopup.OnFragmentInteractionListener, BreakFragment.OnFragmentInteractionListener, IRefreshListener {
 
     public static double DP_PIXEL_SCALING = 1.0;
+
+    private AchievementManager achievements;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -51,6 +62,10 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
         ItemManager.getProjectManager().purge();
         ItemManager.getProjectManager().commit();
         GroupManager.getInstance().init(this);
+
+        RefreshInvoker.getInstance().addRefreshListener(this);
+
+        achievements = new AchievementManager(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -117,6 +132,87 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
     public void onFragmentInteraction(Uri uri){
 
     }
+
+    @Override
+    public void onRefresh(RefreshEvent e) {
+        if (e.getEventType().equals(RefreshEventType.FINISH)) {
+            boolean affectsProject = e.affectsProject();
+            int pointAddition = 0;
+            String itemName = "";
+            if (!affectsProject) {
+                try {
+                    itemName = e.getAffectedTask().getName();
+                    pointAddition = 10 + (int) (e.getAffectedTask().getHoursEstimate());
+                    if (!e.isPriorityElement()) {
+                        pointAddition += 5;
+                    }
+                } catch (IllegalAccessException exception) {
+
+                }
+
+            } else {
+                try {
+                    itemName = e.getAffectedProject().getName();
+                    pointAddition = (int) (5 + e.getAffectedProject().getSteps().size() * 2 +
+                            e.getAffectedProject().getHoursEstimate());
+                } catch (IllegalAccessException exception) {
+
+                }
+            }
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.edit_ID),
+                    Context.MODE_PRIVATE);
+
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putInt("Points", preferences.getInt("Points", 0) + pointAddition);
+            if (affectsProject) {
+                edit.putInt("ProjectsCompleted", preferences.getInt("ProjectsCompleted", 0) + 1);
+                try {
+                    edit.putInt("TotalHoursWorked", preferences.getInt("TotalHoursWorked", 0) +
+                            (int) (e.getAffectedProject().getHoursEstimate()));
+                } catch (IllegalAccessException exception) {}
+            } else {
+                edit.putInt("TasksCompleted", preferences.getInt("TasksCompleted", 0) + 1);
+                try {
+                    edit.putInt("TotalHoursWorked", preferences.getInt("TotalHoursWorked", 0) +
+                            (int) (e.getAffectedTask().getHoursEstimate()));
+                } catch (IllegalAccessException exception) {}
+            }
+
+            edit.commit();
+            String s;
+
+            String achievementChanges = "";
+            if (affectsProject) {
+                try {
+                    achievementChanges = achievements.updateAchievements(
+                            preferences.getInt("TasksCompleted", 0),
+                            preferences.getInt("ProjectsCompleted", 0),
+                            preferences.getInt("TotalHoursWorked", 0),
+                            e.getAffectedProject().getSteps().size(),
+                            (int)e.getAffectedProject().getHoursEstimate(),
+                            preferences);
+                } catch (Exception exception) {}
+            } else {
+                try {
+                    achievementChanges = achievements.updateAchievements(
+                            preferences.getInt("TasksCompleted", 0),
+                            preferences.getInt("ProjectsCompleted", 0),
+                            preferences.getInt("TotalHoursWorked", 0),
+                            preferences);
+                } catch (Exception exception) { }
+
+            }
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            CongratsPopup fragment = CongratsPopup.newInstance(itemName, pointAddition, achievementChanges);
+            fragmentTransaction.add(0, fragment);
+            fragmentTransaction.commitAllowingStateLoss();
+
+        }
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -176,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
                 case 2:
                     return ElementDisplayFragment.newInstance(ElementDisplayFragment.DisplayType.Project);
                 default:
-                    return PlaceholderFragment.newInstance(position + 1);
+                    return BreakFragment.newInstance();
             }
         }
 

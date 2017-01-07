@@ -152,8 +152,6 @@ public abstract class ElementDisplayFragment extends Fragment implements IRefres
                 }
             }
 
-
-
             taskViews = getPageElements(sortAlgorithm);
 
             for (View view : taskViews) {

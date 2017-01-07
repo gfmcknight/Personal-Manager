@@ -63,6 +63,8 @@ public abstract class WorkItem {
 
     public abstract boolean isPriority();
 
+    public abstract float getHoursEstimate();
+
     private void setId(int id) {
         this.id = id;
     }

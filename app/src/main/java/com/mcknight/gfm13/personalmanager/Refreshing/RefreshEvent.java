@@ -13,7 +13,7 @@ public class RefreshEvent {
     boolean affectsTask;
     boolean affectsProject;
 
-   private int itemID;
+    private int itemID;
 
     private Task affectedTask;
     private Project affectedProject;
@@ -31,7 +31,7 @@ public class RefreshEvent {
     }
 
     public boolean isPriorityElement() {
-        return (affectsTask && true) || (affectsProject && true);
+        return (affectsTask && affectedTask.isPriority()) || (affectsProject && affectedProject.isPriority());
         // TODO: Replace true in line above with code that queries priority from Task/Project
     }
 
@@ -41,6 +41,15 @@ public class RefreshEvent {
         } else {
             throw new IllegalAccessException(
                     "getAffectedTask() can only be called if RefreshEvent.affectsTask() returns true.");
+        }
+    }
+
+    public Project getAffectedProject() throws IllegalAccessException {
+        if (affectsProject) {
+            return affectedProject;
+        } else {
+            throw new IllegalAccessException(
+                    "getAffectedProject() can only be called if RefreshEvent.affectsProject() returns true.");
         }
     }
 

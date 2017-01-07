@@ -1,13 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="achievements">
-        <item>{ "Name": "Task Force", "SingleProject": false, "MinProjects": 0, "MinTasks": 10 }</item>
-        <item>{ "Name": "Task Warrior", "SingleProject": false, "MinProjects": 0, "MinTasks": 30 }</item>
-        <item>{ "Name": "Task God", "SingleProject": false, "MinProjects": 0, "MinTasks": 100 }</item>
-        <item>{ "Name": "Project Maker", "SingleProject": false, "MinProjects": 3, "MinTasks": 0 }</item>
-        <item>{ "Name": "Project Manager", "SingleProject": false, "MinProjects": 7, "MinTasks": 0 }</item>
-        <item>{ "Name": "Project Maniac", "SingleProject": false, "MinProjects": 15, "MinTasks": 0 }</item>
-        <item>{ "Name": "The Engineer", "SingleProject": true, "MinSteps": 10, "MinLength": 0 }</item>
-        <item>{ "Name": "The Architect", "SingleProject": true, "MinSteps": 25, "MinLength": 200 }</item>
+        <item>{ \"Name\": \"Task Force\", \"Points\" : 100, \"SingleProject\": false, \"MinProjects\": 0, \"MinTasks\": 10, \"MinTime\": 0 }</item>
+        <item>{ \"Name\": \"Project Maker\", \"Points\" : 100, \"SingleProject\": false, \"MinProjects\": 3, \"MinTasks\": 0, \"MinTime\": 0 }</item>
+        <item>{ \"Name\": \"Hard Worker\", \"Points\" : 100, \"SingleProject\": false, \"MinProjects\": 0, \"MinTasks\": 0, \"MinTime\": 50 }</item>
+        <item>{ \"Name\": \"Task Warrior\", \"Points\" : 200,  \"SingleProject\": false, \"MinProjects\": 0, \"MinTasks\": 30, \"MinTime\": 0 }</item>
+        <item>{ \"Name\": \"Project Manager\", \"Points\" : 200, \"SingleProject\": false, \"MinProjects\": 7, \"MinTasks\": 0, \"MinTime\": 0 }</item>
+        <item>{ \"Name\": \"Driven Worker\", \"Points\" : 200, \"SingleProject\": false, \"MinProjects\": 0, \"MinTasks\": 0, \"MinTime\": 200 }</item>
+        <item>{ \"Name\": \"Task God\", \"Points\" : 300, \"SingleProject\": false, \"MinProjects\": 0, \"MinTasks\": 100, \"MinTime\": 0 }</item>
+        <item>{ \"Name\": \"Project Maniac\", \"Points\" : 300, \"SingleProject\": false, \"MinProjects\": 15, \"MinTasks\": 0, \"MinTime\": 0 }</item>
+        <item>{ \"Name\": \"Tireless Worker\", \"Points\" : 300, \"SingleProject\": false, \"MinProjects\": 0, \"MinTasks\": 0, \"MinTime\": 500 }</item>
+        <item>{ \"Name\": \"The Engineer\", \"Points\" : 100, \"SingleProject\": true, \"MinSteps\": 10, \"MinLength\": 0 }</item>
+        <item>{ \"Name\": \"The Architect\", \"Points\" : 500, \"SingleProject\": true, \"MinSteps\": 25, \"MinLength\": 200 }</item>
+    </string-array>
+
+    <string-array name="achievement_names">
+        <item>Task Force</item>
+        <item>Project Maker</item>
+        <item>Hard Worker</item>
+        <item>Task Warrior</item>
+        <item>Project Manager</item>
+        <item>Driven Worker</item>
+        <item>Task God</item>
+        <item>Project Maniac</item>
+        <item>Tireless Worker</item>
+        <item>The Engineer</item>
+        <item>The Architect</item>
+    </string-array>
+
+    <string-array name="ranks">
+        <item>Newbie</item>
+        <item>Rookie</item>
+        <item>Novice</item>
+        <item>Beginner</item>
+        <item>Intermediate</item>
+        <item>Proficient</item>
+        <item>Talented</item>
+        <item>Experienced</item>
+        <item>Skilled</item>
+        <item>Advanced</item>
+        <item>Expert</item>
+        <item>Seasoned</item>
+        <item>Professional</item>
     </string-array>
 </resources>

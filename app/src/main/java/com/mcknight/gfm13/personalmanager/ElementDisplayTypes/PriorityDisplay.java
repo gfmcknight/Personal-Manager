@@ -23,6 +23,8 @@ public class PriorityDisplay extends ElementDisplayFragment {
     protected List<View> getPageElements(SortAlgorithm algorithm) {
         List<View> elements = new ArrayList<>();
 
+        boolean animated = false;
+
         List<Task> tasks = ItemManager.getTaskManager().getItems();
         if (! tasks.isEmpty()) {
             List<WorkItem> items =
@@ -47,6 +49,16 @@ public class PriorityDisplay extends ElementDisplayFragment {
             }
         }
 
+        if(!animated) {
+            long animateTime = 1500;
+            animated = true;
+            for (View view : elements) {
+                view.setAlpha(0f);
+                view.setVisibility(View.VISIBLE);
+                view.animate().alpha(1f).setDuration(animateTime).setListener(null);
+                animateTime += 300;
+            }
+        }
         return elements;
     }
 

@@ -559,6 +559,34 @@ public class ViewFactory {
         return (makeStepView(context, parent, "", 0));
     }
 
+    public static LinearLayout makeAchievementView(Context context, String name, Boolean complete) {
+        LinearLayout linearLayout = new LinearLayout(context);
+        {
+            LinearLayout.LayoutParams dimensions = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            linearLayout.setLayoutParams(dimensions);
+        }
+
+        Button completionImage = new Button(context);
+        completionImage.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
+        if (complete) {
+            completionImage.setBackgroundResource(R.drawable.complete);
+        } else {
+            completionImage.setBackgroundResource(R.drawable.incomplete);
+        }
+
+        TextView achievementName = new TextView(context);
+        achievementName.setText(name);
+        achievementName.setTextColor(context.getColor(R.color.textColor));
+        achievementName.setTypeface(TYPEFACE);
+
+        linearLayout.addView(completionImage);
+        linearLayout.addView(achievementName);
+
+        return linearLayout;
+    }
+
     private static LinearLayout makeLinearLayoutWrapper(Context context) {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setVisibility(View.VISIBLE);

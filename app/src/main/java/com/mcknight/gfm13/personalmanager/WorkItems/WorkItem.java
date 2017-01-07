@@ -19,7 +19,7 @@ public abstract class WorkItem {
     private int yearDue;
     private int monthDue;
     private int dayDue;
-    Date dateDue;
+    private Date dateDue;
 
     public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
@@ -60,6 +60,8 @@ public abstract class WorkItem {
         this(object.getString("Name"), object.getString("Group"), object.getInt("Year"), object.getInt("Month"),
                 object.getInt("Day"), object.getInt("Id"));
     }
+
+    public abstract boolean isPriority();
 
     private void setId(int id) {
         this.id = id;

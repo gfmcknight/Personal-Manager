@@ -1,6 +1,7 @@
 package com.mcknight.gfm13.personalmanager.WorkItems;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import org.json.*;
 
@@ -8,6 +9,9 @@ import org.json.*;
  * Created by gfm13 on 9/12/2016.
  */
 public class Task extends WorkItem {
+
+    private static final long MS_PER_DAY = 86400000;
+    private static final long LAZY_MS_PER_DAY = 87000000;
 
     private String description;
     private float hoursEstimate;
@@ -21,19 +25,11 @@ public class Task extends WorkItem {
         setDescription(description);
         setHoursEstimate(hoursEstimate);
 
-        Calendar dateSetter = Calendar.getInstance();
-        dateSetter.set(Calendar.YEAR, yearDue);
-        dateSetter.set(Calendar.MONTH, monthDue);
-        dateSetter.set(Calendar.DAY_OF_MONTH, dayDue);
-        dateDue = dateSetter.getTime();
-
     }
 
     public JSONObject toJSON(){
         JSONObject jsonObject = super.toJSON();
         try {
-            jsonObject.put("Name", getName());
-            jsonObject.put("Group", getGroupName());
             jsonObject.put("Description", getDescription());
             jsonObject.put("HoursEstimate", getHoursEstimate());
             return jsonObject;
@@ -49,6 +45,12 @@ public class Task extends WorkItem {
             object.getInt("Day"), object.getInt("Id"));
     }
 
+
+    @Override
+    public boolean isPriority() {
+        long timeLeft = getDateDue().getTime() - (new Date()).getTime();
+        return timeLeft <= LAZY_MS_PER_DAY || getHoursEstimate() / (timeLeft / MS_PER_DAY) >= 1.9;
+    }
 
     public String getDescription() {
         return description;

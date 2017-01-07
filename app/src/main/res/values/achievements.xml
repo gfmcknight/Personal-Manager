@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="achievements">
+        <item>{ "Name": "Task Force", "SingleProject": false, "MinProjects": 0, "MinTasks": 10 }</item>
+        <item>{ "Name": "Task Warrior", "SingleProject": false, "MinProjects": 0, "MinTasks": 30 }</item>
+        <item>{ "Name": "Task God", "SingleProject": false, "MinProjects": 0, "MinTasks": 100 }</item>
+        <item>{ "Name": "Project Maker", "SingleProject": false, "MinProjects": 3, "MinTasks": 0 }</item>
+        <item>{ "Name": "Project Manager", "SingleProject": false, "MinProjects": 7, "MinTasks": 0 }</item>
+        <item>{ "Name": "Project Maniac", "SingleProject": false, "MinProjects": 15, "MinTasks": 0 }</item>
+        <item>{ "Name": "The Engineer", "SingleProject": true, "MinSteps": 10, "MinLength": 0 }</item>
+        <item>{ "Name": "The Architect", "SingleProject": true, "MinSteps": 25, "MinLength": 200 }</item>
+    </string-array>
+</resources>

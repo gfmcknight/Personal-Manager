@@ -76,6 +76,8 @@ public class ViewFactory {
         monthText.setInputType(TYPE_CLASS_NUMBER);
         monthText.setText(Integer.valueOf(month).toString());
         monthText.setMaxEms(2);
+        monthText.setTypeface(TYPEFACE);
+        monthText.setTextColor(context.getColor(R.color.titleColor));
         monthLayout.addView(monthIncrement);
         monthLayout.addView(monthText);
         monthLayout.addView(monthDecrement);
@@ -103,6 +105,8 @@ public class ViewFactory {
         dayText.setInputType(TYPE_CLASS_NUMBER);
         dayText.setText(Integer.valueOf(day).toString());
         dayText.setMaxEms(2);
+        dayText.setTypeface(TYPEFACE);
+        dayText.setTextColor(context.getColor(R.color.titleColor));
         dayLayout.addView(dayIncrement);
         dayLayout.addView(dayText);
         dayLayout.addView(dayDecrement);
@@ -131,6 +135,8 @@ public class ViewFactory {
         yearText.setInputType(TYPE_CLASS_NUMBER);
         yearText.setText(Integer.valueOf(year).toString());
         yearText.setMaxEms(4);
+        yearText.setTypeface(TYPEFACE);
+        yearText.setTextColor(context.getColor(R.color.titleColor));
         yearLayout.addView(yearIncrement);
         yearLayout.addView(yearText);
         yearLayout.addView(yearDecrement);
@@ -149,8 +155,9 @@ public class ViewFactory {
 
         TextView groupName = new TextView(context);
         groupName.setText(name);
+        groupName.setTypeface(TYPEFACE);
         groupName.setTextSize(18.0f);
-        groupName.setTextColor(Color.BLACK);
+        groupName.setTextColor(context.getColor(R.color.textColor));
         {
             LinearLayout.LayoutParams dimensions;
             dimensions = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -179,6 +186,8 @@ public class ViewFactory {
         linearLayout.setBackgroundResource(R.drawable.groupbackground);
 
         EditText groupName = new EditText(context);
+        groupName.setTextColor(context.getColor(R.color.textColor));
+        groupName.setTypeface(TYPEFACE);
         groupName.setHint("Name of this group...");
         {
             LinearLayout.LayoutParams dimensions;
@@ -327,6 +336,19 @@ public class ViewFactory {
         title.setTypeface(TYPEFACE);
         titleHolder.addView(title);
 
+        Button finishButton = new Button(context);
+        finishButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
+                (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
+        finishButton.setBackgroundResource(R.drawable.done);
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ItemManager.getProjectManager().removeItem(project);
+                ItemManager.getProjectManager().commit();
+                RefreshInvoker.getInstance().invokeRefreshEvent(new RefreshEvent(RefreshEventType.FINISH, project));
+            }
+        });
+
         Button editButton = new Button(context);
         editButton.setLayoutParams(new ViewGroup.LayoutParams((int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING),
                 (int)(ICON_SIZE * MainActivity.DP_PIXEL_SCALING)));
@@ -361,6 +383,7 @@ public class ViewFactory {
 
 
         header.addView(titleHolder);
+        header.addView(finishButton);
         header.addView(editButton);
         header.addView(deleteButton);
         header.addView(showButton);

@@ -25,6 +25,11 @@
                 android:typeface="monospace"
                 android:text="@string/all_tasks_message"
                 android:id="@+id/page_title" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

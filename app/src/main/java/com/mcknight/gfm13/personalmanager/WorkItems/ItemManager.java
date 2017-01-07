@@ -13,10 +13,13 @@ import org.json.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ItemManager<T extends WorkItem>  {
+    private static final long LAZY_MS_PER_DAY = 85000000;
+
     private static ItemManager<Task> taskManager = new ItemManager<>(new TaskFactory(), "Tasks");
     private static ItemManager<Project> projectManager = new ItemManager<>(new ProjectFactory(), "Projects");
 
@@ -76,6 +79,15 @@ public class ItemManager<T extends WorkItem>  {
         (new JSONConverter(tasksLocation)).PutJSONObjects(objects);
     }
 
+    public void purge() {
+        Date currentDate = new Date();
+        currentDate.setTime(currentDate.getTime() - LAZY_MS_PER_DAY);
+        for (int i = itemList.size() - 1; i >= 0; i--) {
+            if ((itemList.get(i)).getDateDue().before(currentDate)) {
+                removeItem(itemList.get(i));
+            }
+        }
+    }
     public List<T> getItems() {
         if (itemList == null){
             itemList = new LinkedList<>();

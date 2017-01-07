@@ -44,7 +44,12 @@ public class MainActivity extends AppCompatActivity implements ElementDisplayFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ItemManager.getTaskManager().init(this);
+        ItemManager.getTaskManager().purge();
+        ItemManager.getTaskManager().commit();
+
         ItemManager.getProjectManager().init(this);
+        ItemManager.getProjectManager().purge();
+        ItemManager.getProjectManager().commit();
         GroupManager.getInstance().init(this);
 
         super.onCreate(savedInstanceState);

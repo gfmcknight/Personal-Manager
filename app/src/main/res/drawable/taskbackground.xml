@@ -13,6 +13,4 @@
         android:dashGap="5dp"
         android:dashWidth="10dp"
         android:color="@color/textColor" />
-    <solid
-        android:color="@color/backgroundColor"/>
 </shape>

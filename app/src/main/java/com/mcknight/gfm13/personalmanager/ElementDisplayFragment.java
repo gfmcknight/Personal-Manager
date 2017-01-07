@@ -7,7 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mcknight.gfm13.personalmanager.ElementDisplayTypes.PriorityDisplay;
@@ -16,6 +19,12 @@ import com.mcknight.gfm13.personalmanager.ElementDisplayTypes.TaskDisplay;
 import com.mcknight.gfm13.personalmanager.Refreshing.IRefreshListener;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshEvent;
 import com.mcknight.gfm13.personalmanager.Refreshing.RefreshInvoker;
+import com.mcknight.gfm13.personalmanager.Sorting.DueDateSort;
+import com.mcknight.gfm13.personalmanager.Sorting.GroupSort;
+import com.mcknight.gfm13.personalmanager.Sorting.IdSort;
+import com.mcknight.gfm13.personalmanager.Sorting.MergeSorter;
+import com.mcknight.gfm13.personalmanager.Sorting.NameSort;
+import com.mcknight.gfm13.personalmanager.Sorting.SortAlgorithm;
 
 import java.util.List;
 
@@ -28,7 +37,7 @@ import java.util.List;
  * Use the {@link ElementDisplayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public abstract class ElementDisplayFragment extends Fragment implements IRefreshListener {
+public abstract class ElementDisplayFragment extends Fragment implements IRefreshListener, AdapterView.OnItemSelectedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -42,6 +51,8 @@ public abstract class ElementDisplayFragment extends Fragment implements IRefres
 
     protected List<View> taskViews;
     protected String pageTitle;
+
+    private SortAlgorithm sortAlgorithm;
 
     public ElementDisplayFragment() {
         // Required empty public constructor
@@ -81,6 +92,7 @@ public abstract class ElementDisplayFragment extends Fragment implements IRefres
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
@@ -96,6 +108,16 @@ public abstract class ElementDisplayFragment extends Fragment implements IRefres
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_view, container, false);
+
+        sortAlgorithm = MergeSorter.DEFAULT_SORT;
+
+        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.sort_options, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.group_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
         return view;
 
     }
@@ -130,7 +152,9 @@ public abstract class ElementDisplayFragment extends Fragment implements IRefres
                 }
             }
 
-            taskViews = getPageElements();
+
+
+            taskViews = getPageElements(sortAlgorithm);
 
             for (View view : taskViews) {
                 linearLayout.addView(view);
@@ -147,7 +171,7 @@ public abstract class ElementDisplayFragment extends Fragment implements IRefres
         refresh();
     }
 
-    abstract protected List<View> getPageElements();
+    abstract protected List<View> getPageElements(SortAlgorithm algorithm);
 
     @Override
     public void onDetach() {
@@ -166,6 +190,32 @@ public abstract class ElementDisplayFragment extends Fragment implements IRefres
     public void onStart(){
         refresh();
         super.onStart();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (i) {
+            case 0:
+                sortAlgorithm = new DueDateSort(MergeSorter.DEFAULT_SORT);
+                break;
+            case 1:
+                sortAlgorithm = new GroupSort(MergeSorter.DEFAULT_SORT);
+                break;
+            case 2:
+                sortAlgorithm = new NameSort(MergeSorter.DEFAULT_SORT);
+                break;
+            case 3:
+                sortAlgorithm = new IdSort(MergeSorter.DEFAULT_SORT);
+                break;
+            default:
+                sortAlgorithm = MergeSorter.DEFAULT_SORT;
+        }
+
+        refresh();
+    }
+
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     /**

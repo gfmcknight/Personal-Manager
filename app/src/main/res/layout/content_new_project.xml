@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/backgroundColor"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mcknight.gfm13.personalmanager.NewProject"
     tools:showIn="@layout/activity_new_project">
@@ -23,6 +24,9 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/titleColor"
+                android:textColorHint="@color/textColor"
+                android:typeface="monospace"
                 android:hint="@string/project_name_hint"
                 android:id="@+id/projectName"/>
             <LinearLayout
@@ -34,6 +38,9 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/titleColor"
+                android:textColorHint="@color/textColor"
+                android:typeface="monospace"
                 android:hint="@string/select_group_hint"
                 android:drawableRight="@android:drawable/ic_menu_more"
                 android:id="@+id/groupSelection" />
@@ -48,15 +55,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add..."
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/add"
                     android:layout_centerInParent="true"
                     android:onClick="addButtonPressed"/>
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/done"
                     android:layout_alignParentRight="true"
                     android:onClick="submitPressed"/>
             </RelativeLayout>

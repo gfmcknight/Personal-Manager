@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,17 +19,26 @@ public class Project extends WorkItem {
     private List<Double> timeEstimates;
     private List<Boolean> completed;
 
+    private long startDate;
+
     public Project(String name, String groupName, int yearDue, int monthDue, int dayDue, int id, List<String> steps,
                    List<Double> timeEstimates, List<Boolean> completed){
         super(name, groupName, yearDue, monthDue, dayDue, id);
         this.steps = steps;
         this.timeEstimates = timeEstimates;
         this.completed = completed;
+        this.startDate = new Date().getTime();
     }
 
     public Project(JSONObject object) throws JSONException {
         super(object);
         int numberOfSteps = object.getInt("NumberOfSteps");
+
+        if (object.has("Started")) {
+            this.startDate = object.getLong("Started");
+        } else {
+            this.startDate = new Date().getTime();
+        }
 
         steps = new ArrayList<>();
         timeEstimates =  new ArrayList<>();
@@ -45,6 +55,7 @@ public class Project extends WorkItem {
         JSONObject jsonObject = super.toJSON();
         try {
             jsonObject.put("NumberOfSteps", steps.size());
+            jsonObject.put("Started", startDate);
             for (int i = 0; i < steps.size(); i++) {
                 jsonObject.put("StepName" + i, steps.get(i));
                 jsonObject.put("StepTime" + i, timeEstimates.get(i));
@@ -72,6 +83,12 @@ public class Project extends WorkItem {
         }
     }
 
+    public boolean isPriority() {
+        double timePassedRatio = (double)(new Date().getTime() - getStartDate()) /
+                (getDateDue().getTime() - getStartDate());
+        return (timePassedRatio - getCompletion() > 0.05) || getCompletion() > 0.9;
+    }
+
     public void updateSteps(List<String> steps, List<Double> timeEstimates) {
         List<String> completedSteps = new LinkedList<>();
         for(int i = 0; i < completed.size(); i++) {
@@ -91,6 +108,14 @@ public class Project extends WorkItem {
                 completed.add(false);
             }
         }
+    }
+
+    public long getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(long startDate) {
+        this.startDate = startDate;
     }
 
     public List<String> getSteps() {

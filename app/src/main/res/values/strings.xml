@@ -9,7 +9,7 @@
     <string name="title_activity_groups_editor">Edit Groups</string>
     <string name="task_name_hint">Enter task name</string>
     <string name="task_desc_hint">Enter a description for this task.</string>
-    <string name="time_est_hint">How long do you think this will take?</string>
+    <string name="time_est_hint">Estimated length (hrs)</string>
     <string name="submit_button">Submit</string>
     <string name="add_button">Add</string>
     <string name="all_tasks_message">Current elements:</string>
@@ -24,4 +24,10 @@
     <string name="title_activity_new_project">New Project</string>
     <string name="title_activity_edit_project">Edit Project</string>
 
+    <string-array name="sort_options">
+        <item>by due date</item>
+        <item>by group</item>
+        <item>by name</item>
+        <item>by start date</item>
+    </string-array>
 </resources>
